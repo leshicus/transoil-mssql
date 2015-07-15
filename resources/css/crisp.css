@@ -1,0 +1,52 @@
+/* ЦВЕТОВЫЕ ИЗМЕНЕНИЯ ТЕМЫ CRISP */
+/* цвет фона */
+div.x-border-layout-ct {
+    background-color: #F5F5F5 !important;
+}
+/* цвет фона панели */
+.x-panel-body-default{
+    background: #F5F5F5 !important;
+}
+/* цвет фона панели */
+.x-panel-body-default-framed {
+    background: #F5F5F5 !important;
+}
+/* граница панели */
+.x-panel-default-framed {
+    border-color: #F5F5F5 !important;
+}
+/* цвет фона заголовка таблицы */
+.x-column-header {
+    background-color: #F5F5F5 !important;
+}
+/* цвет фона окна */
+.x-window-body-default{
+    background: #F5F5F5 !important;
+}
+/* цвет фона меню */
+.x-toolbar-default{
+    background-color: #F5F5F5 !important;
+}
+/* граница кнопок меню */
+.x-btn-default-toolbar-small {
+    /*background-color: #E2E2E2;*/
+    background-color: #E5E5E5;
+    border-color: #C8C8C8 !important;
+}
+/* нижняя граница заголовка грида */
+.x-panel-header-default-framed {
+    border: 1px solid #CECECE !important;
+}
+/* цвет крайнейго правого (пустого) заголовка грида */
+.x-grid-header-ct {
+    background-color: #F5F5F5 !important;
+}
+/* чтобы цвет label ckeckfield был таким же как и у других элементов */
+.x-form-cb-label-default.x-form-cb-label-after {
+    color: #666 !important;
+}
+
+/* цвет фона в текстовых полях */
+/*.x-form-text-default {
+    background-color: #F5F5F5 !important;
+}*/

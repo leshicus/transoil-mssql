@@ -1,0 +1,206 @@
+/* ГЛИФЫ */
+/* menumain */
+.x-btn-glyph, .x-title-glyph, .x-menu-item-glyph {
+    opacity: 1 !important;
+}
+
+.x-btn-glyph, .x-title-glyph {
+    font-size: 22px !important;
+}
+
+.glyph-margin-right .x-btn-text.x-btn-icon-left > .x-btn-icon-el-default-toolbar-small {
+    margin-right: 4px !important;
+}
+
+.exit .x-btn-glyph {
+    color: rgb(245, 59, 59) !important;
+    position: relative;
+    font-size: 30px !important;
+}
+.exit:after {
+    content: "";
+    position: absolute; top: 0; left: -2em;
+    width: 500%;
+    height: 100%;
+    background: linear-gradient(to left, rgba(255,255,255,.0), rgba(255,255,255,.8), rgba(255,255,255,.0)) no-repeat -2em 0%;
+    background-size: 2em 100%;
+    transform: skewX(-50deg);
+}
+.exit:hover:after {
+    transition: 2s linear;
+    background-position: 100% 0%;
+}
+
+.fill .x-btn-glyph {
+    color: #8D91FF !important;
+    position: relative;
+    font-size: 30px !important;
+}
+.fill:after {
+    content: "";
+    position: absolute; top: 0; left: -2em;
+    width: 500%;
+    height: 100%;
+    background: linear-gradient(to left, rgba(255,255,255,.0), rgba(255,255,255,.8), rgba(255,255,255,.0)) no-repeat -2em 0%;
+    background-size: 2em 100%;
+    transform: skewX(-50deg);
+}
+.fill:hover:after {
+    transition: 2s linear;
+    background-position: 100% 0%;
+}
+.timeline .x-btn-glyph {
+    color: #2BA13E !important;
+    position: relative;
+    font-size: 30px !important;
+}
+.timeline:after {
+    content: "";
+    position: absolute; top: 0; left: -2em;
+    width: 500%;
+    height: 100%;
+    background: linear-gradient(to left, rgba(255,255,255,.0), rgba(255,255,255,.8), rgba(255,255,255,.0)) no-repeat -2em 0%;
+    background-size: 2em 100%;
+    transform: skewX(-50deg);
+}
+.timeline:hover:after {
+    transition: 2s linear;
+    background-position: 100% 0%;
+}
+.accept .x-btn-glyph {
+    color: #C4723C !important;
+    position: relative;
+    font-size: 30px !important;
+}
+.accept:after {
+    content: "";
+    position: absolute; top: 0; left: -2em;
+    width: 500%;
+    height: 100%;
+    background: linear-gradient(to left, rgba(255,255,255,.0), rgba(255,255,255,.8), rgba(255,255,255,.0)) no-repeat -2em 0%;
+    background-size: 2em 100%;
+    transform: skewX(-50deg);
+}
+.accept:hover:after {
+    transition: 2s linear;
+    background-position: 100% 0%;
+}
+.card .x-btn-glyph {
+    color: #FF8D8D !important;
+    margin-right: 4px;
+    position: relative;
+    font-size: 30px !important;
+}
+.card:after {
+    content: "";
+    position: absolute; top: 0; left: -2em;
+    width: 500%;
+    height: 100%;
+    background: linear-gradient(to left, rgba(255,255,255,.0), rgba(255,255,255,.8), rgba(255,255,255,.0)) no-repeat -2em 0%;
+    background-size: 2em 100%;
+    transform: skewX(-50deg);
+}
+.card:hover:after {
+    transition: 2s linear;
+    background-position: 100% 0%;
+}
+.pay .x-btn-glyph {
+    color: #46C43C !important;
+    margin-right: 4px;
+    position: relative;
+    font-size: 30px !important;
+}
+.pay:after {
+    content: "";
+    position: absolute; top: 0; left: -2em;
+    width: 500%;
+    height: 100%;
+    background: linear-gradient(to left, rgba(255,255,255,.0), rgba(255,255,255,.8), rgba(255,255,255,.0)) no-repeat -2em 0%;
+    background-size: 2em 100%;
+    transform: skewX(-50deg);
+}
+.pay:hover:after {
+    transition: 2s linear;
+    background-position: 100% 0%;
+}
+.rat .x-btn-glyph {
+    color: #c4a585 !important;
+    position: relative;
+    font-size: 30px !important;
+}
+.rat:after {
+    content: "";
+    position: absolute; top: 0; left: -2em;
+    width: 500%;
+    height: 100%;
+    background: linear-gradient(to left, rgba(255,255,255,.0), rgba(255,255,255,.8), rgba(255,255,255,.0)) no-repeat -2em 0%;
+    background-size: 2em 100%;
+    transform: skewX(-50deg);
+}
+.rat:hover:after {
+    transition: 2s linear;
+    background-position: 100% 0%;
+}
+
+/* глифы контекстного меню */
+.print_word .x-menu-item-glyph {
+    color: #2c3bdd !important;
+}
+
+.copy .x-menu-item-glyph {
+    color: #e000bc !important;
+}
+
+.confirm .x-menu-item-glyph {
+    color: #6f4c17 !important;
+}
+
+.return .x-menu-item-glyph {
+    color: #dd1a22 !important;
+}
+
+.buyout .x-menu-item-glyph {
+    color: #009c29 !important;
+}
+
+/* гриды и панели */
+.gridcard .x-title-glyph {
+    color: #FF8D8D !important;
+    margin-left: -4px;
+    position: relative;
+}
+.gridtimeline .x-title-glyph {
+    color: #2BA13E !important;
+    margin-left: -4px;
+    position: relative;
+}
+.gridpay .x-title-glyph {
+    color: #46C43C !important;
+    margin-left: -4px;
+    position: relative;
+}
+
+/* пункты меню */
+.list_bet .x-menu-item-glyph {
+    color: #00ADFF !important;
+}
+
+.group .x-menu-item-glyph {
+    color: #00ADFF !important;
+}
+
+.loginkey .x-window-header-title-default>.x-title-icon-wrap-default>.x-title-glyph {
+    color: #3B9B29 !important;
+}
+
+/* Кнопки */
+/* иконка на кнопке Редактировать */
+.glyph_edit .x-btn-icon-el-default-small.x-btn-glyph {
+    color: #3386C2 !important;
+}
+
+
+/* Кнопки тулбара */
+.plus .x-btn-icon-el-default-toolbar-small.x-btn-glyph {
+    color: #559D59 !important;
+}

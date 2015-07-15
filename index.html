@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html manifest="">
+<head>
+    <!--<script type="text/javascript" src="https://getfirebug.com/firebug-lite.js"></script>-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="UTF-8">
+
+    <title>Система тестирования знаний</title>
+
+    <!-- The line below must be kept intact for Sencha Cmd to build your application -->
+    <script id="microloader" type="text/javascript" src="bootstrap.js"></script>
+
+</head>
+<body>
+<script type="text/javascript">
+    document.onkeydown = function(){
+        var x = event.keyCode;
+        //alert(x);
+        if (((x == 83)||(x == 84)||(x == 115)||(x == 70)||(x == 78)||(x == 79)||(x == 80)) && (event.ctrlKey) || (x > 111 && x<124) ){
+            event.cancelBubble = true;
+            event.returnValue = false;
+            event.keyCode = false;
+            return false;
+        }
+    }
+</script>
+</body>
+</html>

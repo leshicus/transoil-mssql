@@ -1,0 +1,101 @@
+.bg-yellow > td { background:#fffec7 !important; }
+
+.icon_add {
+ background-image: url(/resources/image/math-add-icon.png) !important;
+}
+.icon_delete {
+ background-image: url(/resources/image/02-Recycle-icon.png) !important;
+}
+.icon_back {
+    background-image: url(/resources/image/back-icon.png) !important;
+}
+.icon_reg {
+    background-image: url(/resources/image/back-icon.png) !important;
+}
+.icon_refresh {
+    background-image: url(/resources/image/back-icon.png) !important;
+}
+
+
+
+    /* admin */
+
+.icon_chart {
+    background-image: url(/resources/image/chart-icon.png) !important;
+}
+.icon_user {
+    background-image: url(/resources/image/User-Files-icon.png) !important;
+}
+.icon_log {
+    background-image: url(/resources/image/document-icon.png) !important;
+}
+.icon_class {
+    background-image: url(/resources/image/Categories-applications-education-school-icon.png) !important;
+}
+.icon_block {
+    background-image: url(/resources/image/Lock-Lock-icon.png) !important;
+}
+.icon_unblock {
+    background-image: url(/resources/image/Lock-Unlock-icon.png) !important;
+}
+.icon_pdf {
+    background-image: url(/resources/image/pdf.ico) !important;
+}
+.icon_excel {
+    background-image: url(/resources/image/document-excel-icon.png) !important;
+}
+.icon_password {
+    background-image: url(/resources/image/symbol-delete-icon.png) !important;
+}
+.icon_reg {
+    background-image: url(/resources/image/Actions-user-properties-icon.png) !important;
+}
+.icon_unreg {
+    background-image: url(/resources/image/Actions-user-group-delete-icon.png) !important;
+}
+.icon_tool {
+    background-image: url(/resources/image/Administrative-Tools-icon.png) !important;
+}
+
+    /* manage */
+
+.icon_question {
+    background-image: url(/resources/image/Help-File-icon.png) !important;
+}
+.icon_export {
+    background-image: url(/resources/image/export-icon.png) !important;
+}
+.icon_import {
+    background-image: url(/resources/image/import-icon.png) !important;
+}
+.icon_group {
+    background-image: url(/resources/image/Groups-Meeting-Light-icon.png) !important;
+}
+.icon_spec {
+    background-image: url(/resources/image/Groups-Rescuers-Light-icon.png) !important;
+}
+.icon_act {
+    background-image: url(/resources/image/General-Application-icon.png) !important;
+}
+.icon_know {
+    background-image: url(/resources/image/Books-2-icon.png) !important;
+}
+.icon_org {
+     background-image: url(/resources/image/Two-storied-house-icon.png) !important;
+}
+
+    /* test */
+
+.icon_test {
+background-image: url(/resources/image/Test-paper-icon.png) !important;
+}
+.icon_self {
+background-image: url(/resources/image/Books-icon.png) !important;
+}
+.icon_start {
+ background-image: url(/resources/image/Map-Marker-Chequered-Flag-Right-Azure-icon.png) !important;
+}
+.icon_next {
+background-image: url(/resources/image/arrow-right-icon.png) !important;
+}
+
