@@ -71,7 +71,7 @@ switch ($act) {
                   q.knowid,
                   g.actid
 		        from question q
-                  LEFT JOIN `group` g ON
+                  LEFT JOIN `grp` g ON
                   g.groupid = q.groupid
                   LEFT JOIN `activity` a ON
                   a.actid = g.actid'.

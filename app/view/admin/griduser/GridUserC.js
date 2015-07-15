@@ -65,39 +65,44 @@ Ext.define('App.view.admin.griduser.GridUserC', {
             click: function (button) {
                 console.log('action=add');
 
-                var /*tree = this.getView().up('#content').down('treeUser'),
-                 selected = tree.getSelected(),*/
+                var tree = this.getView().up('#content').down('treeUser'),
+                    selected = tree.getSelected(),
                     grid = this.getView(),
                     vmGrid = grid.getViewModel(),
                     storeUser = vmGrid.getStore('user');
-                //if (selected) {
-                var newRec = storeUser.add({
+                if (selected && selected.raw) {
+                    var newRec = storeUser.add({})[0],
+                        orgid = selected.raw.orgid || null,
+                        actid = selected.raw.actid || null,
+                        groupid = selected.raw.groupid || null,
+                        form = Ext.create('App.view.admin.formuser.FormUserV',{
+                            viewModel:{
+                                data:{
+                                    orgid:orgid,
+                                    actid:actid,
+                                    groupid:groupid
+                                }
+                            }
+                        }),
+                        vm = form.getViewModel();
+                    storeUser.insert(0, newRec);
+                    vm.set('theUser', newRec);
 
-                    })[0],
-                    form = Ext.create('App.view.admin.formuser.FormUserV'),
-                    vm = form.getViewModel(),
-                    storeSpec = vm.getStore('spec');
-                storeUser.insert(0, newRec);
-                vm.set('theUser', newRec);
-                /* storeSpec.load({
-                 callback: function (records, operation, success) {
-
-                 }
-                 });*/
-                Ext.defer(function () {
-                    var window = Ext.create('Ext.Window', {
-                        frame: true,
-                        title: 'Редактирование данных сотрудника',
-                        width: 500,
-                        height: 300,
-                        closable: false,
-                        modal: true,
-                        layout: 'fit'
-                    });
-                    window.add(form);
-                    window.show();
-                }, 200);
-                // }
+                    Ext.defer(function () {
+                        var window = Ext.create('Ext.Window', {
+                            frame: true,
+                            title: 'Редактирование данных сотрудника',
+                            width: 500,
+                            height: 300,
+                            closable: false,
+                            modal: true,
+                            layout: 'fit'
+                        });
+                        window.add(form);
+                        window.show();
+                    }, 200);
+                }else
+                    Ext.Msg.alert('Ошибка', 'Не выделена строка в таблице Структура');
             }
         },
         'gridUser button[action=delete]': {
@@ -107,7 +112,7 @@ Ext.define('App.view.admin.griduser.GridUserC', {
                 var grid = button.up('grid'),
                     selection = grid.getSelected();
                 // * удаляем несколько пемеченных записей
-                if (selection != '') {
+                if (selection) {
                     Ext.each(selection, function (item) {
                         grid.getViewModel().getStore('user').remove(item);
                     });

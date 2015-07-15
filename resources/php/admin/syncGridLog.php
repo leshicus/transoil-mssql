@@ -30,7 +30,7 @@ switch ($act) {
                   CONCAT_WS(' ',u.familyname,u.firstname,u.lastname) as fio,
                   t.logtypename
 		        from `log` g,
-		            `user` u,
+		            `usr` u,
 		            `logtype` t
 		        where u.userid = g.userid
 		        and t.logtypeid = g.logtypeid ".$where.

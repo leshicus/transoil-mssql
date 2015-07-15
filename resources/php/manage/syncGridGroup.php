@@ -10,7 +10,7 @@ $data = json_decode(file_get_contents('php://input'), true);
 switch ($act) {
     case 'create':
         $sql = "
-            insert into `group`()values();
+            insert into `grp`()values();
         ";
         try {
             $res = $mysqli->query($sql);
@@ -39,7 +39,7 @@ switch ($act) {
                     WHERE gk.groupid = g.groupid
                   ) AS knowids*/
                   g.knowids
-		        from `group` g
+		        from `grp` g
 		        order by g.actid, g.groupnum';
         try {
             $res = $mysqli->query($sql);
@@ -71,7 +71,7 @@ switch ($act) {
             $knowids = implode($knowids,',');
 
         $sql = "
-            update `group`
+            update `grp`
             set actid = '$actid',
                 groupnum = '$groupnum',
                 groupname = '$groupname',
@@ -99,7 +99,7 @@ switch ($act) {
         $groupid = $data['groupid'];
 
         $sql = "
-            delete from `group`
+            delete from `grp`
             where groupid = '$groupid'
         ";
         try {

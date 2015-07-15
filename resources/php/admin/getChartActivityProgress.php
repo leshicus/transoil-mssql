@@ -9,9 +9,9 @@ $org = $_REQUEST['org'];
 $sql = "SELECT
     a.actabbr as name,
     (SELECT COUNT(*)
-          FROM `user` u,
+          FROM `usr` u,
           speciality s,
-          `group` g,
+          `grp` g,
           class c
           WHERE u.specid = s.specid
           AND g.groupid = s.groupid
@@ -35,9 +35,9 @@ $sql = "SELECT
   SELECT
     a.actabbr as name,
     (SELECT COUNT(*)
-          FROM `user` u,
+          FROM `usr` u,
           speciality s,
-          `group` g,
+          `grp` g,
           class c
           WHERE u.specid = s.specid
           AND g.groupid = s.groupid

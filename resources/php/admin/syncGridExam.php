@@ -16,7 +16,7 @@ switch ($act) {
         // * определим ФИО наблюдателя
         $sql_fio = "select
           CONCAT_WS(' ',u.familyname,u.firstname,u.lastname) as fio
-        from `user` u
+        from `usr` u
 		where u.userid = '$userid'";
         try {
             $res_fio = $mysqli->query($sql_fio);
@@ -76,9 +76,9 @@ switch ($act) {
             $where .= " and e.orgid = (
                 select a.orgid
                 from `activity` a,
-                     `group` g,
+                     `grp` g,
                      `speciality` s,
-                     `user` u
+                     `usr` u
                 where a.actid = g.actid
                   and g.groupid = s.groupid
                   and s.specid = u.specid
@@ -94,7 +94,7 @@ switch ($act) {
                   e.orgid,
                   o.orgabbr
 		        from `exam`   e,
-		             `user` u,
+		             `usr` u,
 		             `org` o
 		        where o.orgid = e.orgid
 		        and u.userid = e.userid " . $where .

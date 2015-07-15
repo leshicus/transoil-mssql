@@ -44,7 +44,8 @@ Ext.define('App.view.manage.question.tree.TreeQuestionC', {
                             });
                         }, 20);
                     }
-                }
+                }else
+                    Ext.Msg.alert('Ошибка', 'Не выделена строка в таблице');
             }
         },
         'tool[type=maximize]': {

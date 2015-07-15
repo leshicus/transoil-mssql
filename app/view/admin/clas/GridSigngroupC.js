@@ -4,7 +4,7 @@ Ext.define('App.view.admin.clas.GridSigngroupC', {
     alias: 'controller.gridsigngroup',
 
     control: {
-        '#':{
+        '#': {
             edit: function (editor, context) {
                 console.log('edit');
 
@@ -47,13 +47,16 @@ Ext.define('App.view.admin.clas.GridSigngroupC', {
                 var grid = button.up('grid'),
                     store = grid.getViewModel().getStore('signgroup'),
                     selection = grid.getSelected();
-                store.remove(selection);
-                store.sync({
-                 failure: function () {
-                 Ext.MessageBox.alert('Ошибка', 'Пользователь не удален');
-                 },
-                 scope: this
-                 });
+                if(selection){
+                    store.remove(selection);
+                    store.sync({
+                        failure: function () {
+                            Ext.MessageBox.alert('Ошибка', 'Пользователь не удален');
+                        },
+                        scope: this
+                    });
+                }else
+                    Ext.Msg.alert('Ошибка', 'Не выделена строка в таблице');
             }
         }
     }

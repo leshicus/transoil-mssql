@@ -32,7 +32,7 @@ Ext.define('App.view.manage.question.answer.GridAnswerC', {
 
                 var gridQuestion = button.up('#content').down('gridQuestion'),
                     selectedQuestion = gridQuestion.getSelected();
-                if (selectedQuestion != '') {
+                if (selectedQuestion) {
                     var form = Ext.create('App.view.manage.question.answer.FormAnswerV');
                     var window = Ext.create('Ext.Window', {
                         frame: true,
@@ -57,7 +57,7 @@ Ext.define('App.view.manage.question.answer.GridAnswerC', {
                 var grid = button.up('#content').down('gridAnswer'),
                     selection = grid.getSelected();
                 // * удаляем несколько пемеченных записей
-                if (selection != '') {
+                if (selection) {
                     Ext.each(selection, function (item) {
                         grid.getViewModel().getStore('answer').remove(item);
                         grid.getViewModel().getStore('answer').sync({

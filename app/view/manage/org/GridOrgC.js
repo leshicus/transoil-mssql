@@ -6,7 +6,7 @@ Ext.define('App.view.manage.org.GridOrgC', {
     alias: 'controller.gridOrg',
 
     control: {
-        '#':{
+        '#': {
             edit: function (editor, context) {
                 console.log('edit');
 
@@ -53,15 +53,17 @@ Ext.define('App.view.manage.org.GridOrgC', {
 
                 var grid = button.up('grid'),
                     selection = grid.getSelected();
-                grid.getViewModel().getStore('org').remove(selection);
-                grid.getViewModel().getStore('org').sync({
-                    failure: function () {
-                        Ext.MessageBox.alert('Ошибка', 'Не сохранено');
-                    },
-                    scope: this
-                });
+                if (selection) {
+                    grid.getViewModel().getStore('org').remove(selection);
+                    grid.getViewModel().getStore('org').sync({
+                        failure: function () {
+                            Ext.MessageBox.alert('Ошибка', 'Не сохранено');
+                        },
+                        scope: this
+                    });
+                } else
+                    Ext.Msg.alert('Ошибка', 'Не выделена строка в таблице');
             }
         }
-
     }
 });

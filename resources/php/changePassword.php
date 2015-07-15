@@ -24,7 +24,7 @@ if (!$textLogin || !$textOldPassword || !$textNewPassword) {
         // * проверка, что логин существует
         $sql_login = "
          select count(*) as nCNT
-         from `user` u
+         from `usr` u
          where u.login = '$textLogin'
         ";
         try {
@@ -40,7 +40,7 @@ if (!$textLogin || !$textOldPassword || !$textNewPassword) {
 
             $sql_pas = "
              select count(*) as nCNT
-             from `user` u
+             from `usr` u
              where u.login = '$textLogin'
              and u.password = '$oldPassSha1'
             ";
@@ -55,7 +55,7 @@ if (!$textLogin || !$textOldPassword || !$textNewPassword) {
             if ($row_pas[0]) {
                 // * все ОК, поменяем старый пароль на новый
                 $sql_change = "
-                 update `user` u
+                 update `usr` u
                  set u.password = '$newPassSha1'
                  where u.login = '$textLogin'
                 ";

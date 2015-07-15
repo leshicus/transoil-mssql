@@ -27,7 +27,7 @@ if (!$textLogin || !$textFamily || !$textName || !$comboSpeciality || !$textPass
         // * проверка, что логин уже существует, либо сочетание ФИО-специальность
         $sql_login = "
          select count(*) as nCNT
-         from `user` u
+         from `usr` u
          where u.login = '$textLogin'
         ";
         try {
@@ -40,7 +40,7 @@ if (!$textLogin || !$textFamily || !$textName || !$comboSpeciality || !$textPass
         if (!$row_login[0]) {
             $sql_fio = "
              select count(*) as nCNT
-             from `user` u
+             from `usr` u
              where u.familyname = '$textFamily'
              and u.firstname = '$textName'
              and u.lastname = '$textLastname'
@@ -56,7 +56,7 @@ if (!$textLogin || !$textFamily || !$textName || !$comboSpeciality || !$textPass
             if (!$row_fio[0]) {
                 $passSha1 = sha1($textPassword);
                 $sql = "
-                    insert into user(
+                    insert into usr(
                       familyname,
                       firstname,
                       lastname,

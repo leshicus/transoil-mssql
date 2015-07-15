@@ -1,7 +1,6 @@
 Ext.define('App.view.manage.question.question.FormQuestionC', {
     extend: 'Ext.app.ViewController',
-    requires: [
-    ],
+    requires: [],
     alias: 'controller.formquestion',
 
     control: {
@@ -21,7 +20,7 @@ Ext.define('App.view.manage.question.question.FormQuestionC', {
                             selectedTree = treeQuestion.getSelected(),
                             gridAnswer = Ext.ComponentQuery.query('gridAnswer')[0],
                             storeAnswer = gridAnswer.getViewModel().getStore('answer');
-                        if (selectedTree.raw) {
+                        if (selectedTree && selectedTree.raw) {
                             var knowid = selectedTree.raw.knowid,
                                 groupid = selectedTree.raw.groupid;
                             values['groupid'] = groupid;

@@ -24,7 +24,7 @@ if (isset($know)) { // самоподготовка
                 (select
                     q.questionid
                 from
-                    `user` u,
+                    `usr` u,
                     `speciality` s,
                     `question` q
                 where u.userid = '$userid'
@@ -41,7 +41,7 @@ if (isset($know)) { // самоподготовка
                 (select
                     q.questionid
                 from
-                    `user` u,
+                    `usr` u,
                     `speciality` s,
                     `question` q
                 where u.userid = '$userid'
@@ -124,7 +124,7 @@ if (isset($know)) { // самоподготовка
                     (select
                         q.questionid
                     from
-                        `user` u,
+                        `usr` u,
                         `speciality` s,
                         `question` q
                     where u.userid = '$userid'

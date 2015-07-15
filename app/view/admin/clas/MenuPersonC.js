@@ -10,7 +10,7 @@ Ext.define('App.view.admin.clas.MenuPersonC', {
                     selection = gridPerson.getSelected(),
                     menuReg = menu.down('#menuReg'),
                     menuUnreg = menu.down('#menuUnreg');
-                if(selection[0]){
+                if(selection && selection[0]){
                     var reg = selection[0].get('reg');
                     if (!reg || reg == 0) {
                         menuReg.enable();

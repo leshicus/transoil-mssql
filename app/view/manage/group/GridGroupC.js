@@ -71,7 +71,8 @@ Ext.define('App.view.manage.group.GridGroupC', {
                             } else {
                                 Ext.Msg.alert('Не удалено', 'Существуют специальности привязанные к данной группе');
                             }
-                        }
+                        }else
+                            Ext.Msg.alert('Ошибка', 'Не выделена строка в таблице');
                     }
                 });
             }

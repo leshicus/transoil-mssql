@@ -56,7 +56,7 @@ function _getUserName($mysqli,$userid)
                 u.firstname,
                 u.lastname,
                 u.login
-         from `user` u
+         from `usr` u
          where u.userid = '.$userid;
     try {
         $res = $mysqli->query($sql);

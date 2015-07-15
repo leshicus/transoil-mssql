@@ -40,19 +40,23 @@ Ext.define('App.view.manage.spec.GridSpecC', {
                 var grid = button.up('grid'),
                     storeSpec = grid.getViewModel().getStore('spec'),
                     treeSpec = button.up('#content').down('treeSpec'),
-                    selectedTree = treeSpec.getSelected(),
-                    groupid = selectedTree.get('groupid'),
-                    orgid = selectedTree.get('orgid'),
-                    actid = selectedTree.get('actid');
-                if (!orgid || !actid || !groupid) {
+                    selectedTree = treeSpec.getSelected();
+                if(selectedTree){
+                    var groupid = selectedTree.get('groupid'),
+                        orgid = selectedTree.get('orgid'),
+                        actid = selectedTree.get('actid');
+                    if (!orgid || !actid || !groupid) {
+                        Ext.Msg.alert('Ошибка', 'Не выбрана группа в оргструктуре');
+                    } else {
+                        var newRecord = storeSpec.add({
+                            groupid: groupid,
+                            orgid: orgid,
+                            actid: actid
+                        })[0];
+                        storeSpec.insert(0, newRecord);
+                    }
+                }else{
                     Ext.Msg.alert('Ошибка', 'Не выбрана группа в оргструктуре');
-                } else {
-                    var newRecord = storeSpec.add({
-                        groupid: groupid,
-                        orgid: orgid,
-                        actid: actid
-                    })[0];
-                    storeSpec.insert(0, newRecord);
                 }
             }
         },

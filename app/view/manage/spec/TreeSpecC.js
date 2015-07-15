@@ -34,7 +34,8 @@ Ext.define('App.view.manage.spec.TreeSpecC', {
                             });
                         }, 20);
                     }
-                }
+                }else
+                    Ext.Msg.alert('Ошибка', 'Не выделена строка в таблице');
             }
         },
 

@@ -58,7 +58,7 @@ $groupQuery = "
               g.groupname,
               g.groupnum,
               g.knowids
-            from `group` g
+            from `grp` g
             order by g.groupnum
         ";
 try {

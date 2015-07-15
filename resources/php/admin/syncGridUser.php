@@ -43,9 +43,9 @@ switch ($act) {
                   a.orgid,
                   a.actid,
                   o.orgid
-		        from `user` u
+		        from `usr` u
 		         left join `speciality` s on s.specid = u.specid
-		         left join `group` g on g.groupid = s.groupid
+		         left join `grp` g on g.groupid = s.groupid
 		         left join `activity` a on a.actid = g.actid
 		         left join `org` o on o.orgid = a.orgid "
 		         .$where.
@@ -111,7 +111,7 @@ switch ($act) {
                        r.roleid,
                        r.rolename,
                        u.password
-                from `user` u
+                from `usr` u
                   LEFT JOIN `speciality` s ON s.specid = u.specid
                   LEFT JOIN `role` r ON r.roleid = u.roleid
                 where u.userid = '.$userid;
@@ -135,7 +135,7 @@ switch ($act) {
             if(!$password){
                 $password = $initPassword;
                 $sql = "
-                    update `user`
+                    update `usr`
                     set familyname = '$familyname',
                         firstname = '$firstname',
                         lastname = '$lastname',
@@ -147,7 +147,7 @@ switch ($act) {
                 ";
             }else{
                 $sql = "
-                    update `user`
+                    update `usr`
                     set familyname = '$familyname',
                         firstname = '$firstname',
                         lastname = '$lastname',
@@ -203,7 +203,7 @@ switch ($act) {
             $fio = $familyname . ' ' . $firstname . ' ' . $lastname . ' (' . $login . ')';
 
             $sql = "
-                delete from `user`
+                delete from `usr`
                 where userid = '$userid'
             ";
             try {

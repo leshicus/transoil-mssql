@@ -9,7 +9,7 @@ $org = $_REQUEST['org'];
 /*$sql = "
     SELECT k.knowname as name,
     (SELECT COUNT(*)
-      FROM `group` g,
+      FROM `grp` g,
       card c,
       question q,
       answer a,
@@ -35,7 +35,7 @@ $org = $_REQUEST['org'];
 $sql = "
     SELECT k.knowname as name,
     ((SELECT COUNT(*)
-      FROM `group` g,
+      FROM `grp` g,
       card c,
       question q,
       answer a,
@@ -59,7 +59,7 @@ $sql = "
       /
     (SELECT COUNT(*)
       FROM question q,
-      `group` g,
+      `grp` g,
       activity a
       WHERE q.knowid = k.knowid
         AND a.orgid = '$org'

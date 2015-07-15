@@ -14,7 +14,7 @@ switch ($act) {
         $groupnum = $data['groupnum'];
 
         $sql = "
-            insert into `group`(
+            insert into `grp`(
               actid,
               groupnum
             )values(
@@ -53,10 +53,10 @@ switch ($act) {
                   reg,
                   a.timelimit
 		        from `class` c,
-		             `user`  u,
+		             `usr`  u,
 		             `activity` a,
 		             `speciality` s,
-		             `group` g
+		             `grp` g
 		        where u.userid = c.userid
                 and s.specid = u.specid
                 and g.groupid = s.groupid

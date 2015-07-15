@@ -16,14 +16,17 @@ Ext.define('App.view.manage.question.question.GridQuestionC', {
                 var gridAnswer = grid.up('#content').down('gridAnswer'),
                     storeAnswer = gridAnswer.getViewModel().getStore('answer'),
                     gridQuestion = this.getView(),
-                    selection = gridQuestion.getSelected(),
-                    questionid = selection[0].get('questionid');
-                storeAnswer.clearFilter();
-                storeAnswer.load({
-                    params: {
-                        questionid: questionid
-                    }
-                });
+                    selection = gridQuestion.getSelected();
+                if(selection){
+                    var questionid = selection[0].get('questionid');
+                    storeAnswer.clearFilter();
+                    storeAnswer.load({
+                        params: {
+                            questionid: questionid
+                        }
+                    });
+                }else
+                    Ext.Msg.alert('Ошибка', 'Не выделена строка в таблице');
             },
             celldblclick: function (row, td, cellIndex, record, tr, rowIndex, e, eOpts) {
                 console.log('celldblclick');

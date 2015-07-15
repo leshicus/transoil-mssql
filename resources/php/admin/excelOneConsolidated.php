@@ -27,10 +27,10 @@ $queryHeader = "select
             (SELECT COUNT(*) FROM card t WHERE t.examid = e.examid AND t.userid = u.userid) AS numQuestions,
             o.orgabbr
           from exam e,
-               `user` u,
+               `usr` u,
                speciality s,
                class c,
-               `group` g,
+               `grp` g,
                `activity` a,
                `org` o
           where e.examid in ($examarr)

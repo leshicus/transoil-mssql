@@ -8,7 +8,6 @@ Ext.define('App.view.manage.question.question.FormUploadC', {
             click: function (button) {
                 console.log('import');
 
-
                 var form = button.up('formUpload'),
                     gridQuestion = Ext.ComponentQuery.query('gridQuestion')[0],
                     gridAnswer = gridQuestion.up('#content').down('gridAnswer')[0],

@@ -6,7 +6,7 @@ Ext.define('App.view.manage.know.GridKnowC', {
     alias: 'controller.gridKnow',
 
     control: {
-        '#':{
+        '#': {
             edit: function (editor, context) {
                 console.log('edit');
 
@@ -53,15 +53,17 @@ Ext.define('App.view.manage.know.GridKnowC', {
 
                 var grid = button.up('grid'),
                     selection = grid.getSelected();
-                grid.getViewModel().getStore('know').remove(selection);
-                grid.getViewModel().getStore('know').sync({
-                    failure: function () {
-                        Ext.MessageBox.alert('Ошибка', 'Не сохранено');
-                    },
-                    scope: this
-                });
+                if (selection) {
+                    grid.getViewModel().getStore('know').remove(selection);
+                    grid.getViewModel().getStore('know').sync({
+                        failure: function () {
+                            Ext.MessageBox.alert('Ошибка', 'Не сохранено');
+                        },
+                        scope: this
+                    });
+                } else
+                    Ext.Msg.alert('Ошибка', 'Не выделена строка в таблице');
             }
         }
-
     }
 });

@@ -5,11 +5,15 @@ Ext.define('App.view.admin.formuser.FormUserM', {
         'App.model.RoleM'
     ],
     alias: 'viewmodel.formuser',
-
+    data:{
+        orgid:null,
+        actid:null,
+        groupid:null
+    },
     stores: {
         spec: {
             model:'App.model.SpecM',
-            autoLoad:true
+            autoLoad:false
         },
         role: {
             model:'App.model.RoleM',

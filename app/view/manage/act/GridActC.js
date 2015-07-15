@@ -88,7 +88,8 @@ Ext.define('App.view.manage.act.GridActC', {
                             }
                         }
                     });
-                }
+                }else
+                    Ext.Msg.alert('Ошибка', 'Не выделена строка в таблице');
             }
         }
     }

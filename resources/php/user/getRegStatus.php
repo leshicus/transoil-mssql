@@ -20,10 +20,10 @@ try {
     $cnt = $row[0];
     if ($cnt != 0){
         $query = "select a.timelimit
-                from `user` u
+                from `usr` u
                   LEFT JOIN `speciality` s ON
                     u.specid = s.specid
-                  LEFT JOIN `group` g ON
+                  LEFT JOIN `grp` g ON
                     g.groupid = s.groupid
                   LEFT JOIN `activity` a ON
                     a.actid = g.actid

@@ -8,9 +8,9 @@ $org = $_REQUEST['org'];
 /*$sql = "SELECT
     a.actabbr as name,
     (SELECT COUNT(*)
-          FROM `user` u,
+          FROM `usr` u,
           speciality s,
-          `group` g
+          `grp` g
           WHERE u.specid = s.specid
           AND g.groupid = s.groupid
           AND a.actid = g.actid
@@ -42,7 +42,7 @@ try {
 
 // * получим максимальное количество групп
 $sql = 'SELECT MAX(g.groupnum) as groupnum
-        FROM `group` g';
+        FROM `grp` g';
 try {
     $res = $mysqli->query($sql);
     $row = $res->fetch_row();
@@ -61,9 +61,9 @@ $sql = 'SELECT
 for($i = 1; $i <= $groupnum; $i++){
     $sql .= "
     (SELECT COUNT(*)
-          FROM `user` u,
+          FROM `usr` u,
           speciality s,
-          `group` g
+          `grp` g
           WHERE u.specid = s.specid
           AND g.groupid = s.groupid
           AND a.actid = g.actid

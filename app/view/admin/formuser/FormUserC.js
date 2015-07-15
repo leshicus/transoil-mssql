@@ -71,5 +71,18 @@ Ext.define('App.view.admin.formuser.FormUserC', {
             }
         }
 
+    },
+    onRender: function (form) {
+        var vm = form.getViewModel(),
+            storeSpec = vm.getStore('spec'),
+            orgid = vm.get('orgid'),
+            actid = vm.get('actid'),
+            groupid = vm.get('groupid');
+        storeSpec.proxy.extraParams = {
+            orgid:orgid,
+            actid:actid,
+            groupid:groupid
+        };
+        storeSpec.load();
     }
 });
