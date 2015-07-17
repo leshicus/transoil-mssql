@@ -29,9 +29,9 @@ switch ($act) {
                   g.logtypeid,
                   CONCAT_WS(' ',u.familyname,u.firstname,u.lastname) as fio,
                   t.logtypename
-		        from `log` g,
-		            `usr` u,
-		            `logtype` t
+		        from [transoil].[dbo].[log] g,
+		            [transoil].[dbo].[usr] u,
+		            [transoil].[dbo].[logtype] t
 		        where u.userid = g.userid
 		        and t.logtypeid = g.logtypeid ".$where.
 		        " order by logid desc";
@@ -55,7 +55,6 @@ switch ($act) {
         echo "default";
 };
 
-if ($mysqli)
-    $mysqli->close();
+$conn = null;
 
 ?>

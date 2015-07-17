@@ -15,7 +15,7 @@ $orgid = $_REQUEST['orgid'];
 switch ($act) {
     case 'create':
         $sql = "
-            insert into speciality
+            insert into [transoil].[dbo].[speciality]
             (groupid, orgid, specname)
             values
             (" . $data['groupid'] . "," . $data['orgid'] .",'" . $data['specname'] . "')
@@ -54,20 +54,18 @@ switch ($act) {
                   s.groupid,
                   a.orgid,
                   o.orgabbr
-		        from speciality s
-		         left join `grp` g on g.groupid = s.groupid
-		         left join `activity` a on a.actid = g.actid
-		         left join `org` o on o.orgid = a.orgid '
+		        from [transoil].[dbo].[speciality] s
+		         left join [transoil].[dbo].[grp] g on g.groupid = s.groupid
+		         left join [transoil].[dbo].[activity] a on a.actid = g.actid
+		         left join [transoil].[dbo].[org] o on o.orgid = a.orgid '
             . $where .
             ' order by s.specname';
         try {
-            $res = $mysqli->query($sql);
             $list = array();
-            //print_r($mysqli);
-            while ($row = $res->fetch_array(MYSQLI_ASSOC)) {
-                foreach ($row as $k => $v)
-                    $arr[$k] = $v;
-                array_push($list, $arr);
+            $res = $conn->query($sql);
+            $res->setFetchMode(PDO::FETCH_ASSOC);
+            while($row = $res->fetch()) {
+                array_push($list, $row);
             }
         } catch (Exception $e) {
             $success = false;
@@ -83,7 +81,7 @@ switch ($act) {
         $groupid = $data['groupid'];
 
         $sql = "
-            update speciality
+            update [transoil].[dbo].[speciality]
             set specname = '$specname',
                 groupid = '$groupid'
             where specid = '$specid'
@@ -109,7 +107,7 @@ switch ($act) {
         $specid = $data['specid'];
 
         $sql = "
-            delete from speciality
+            delete from [transoil].[dbo].[speciality]
             where specid = '$specid'
         ";
         try {
@@ -132,7 +130,5 @@ switch ($act) {
         echo "default";
 };
 
-if ($mysqli)
-    $mysqli->close();
-
+$conn = null;
 ?>

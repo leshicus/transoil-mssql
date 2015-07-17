@@ -5,7 +5,7 @@ $query = "select
               k.knowid,
               k.knownum,
               k.knowname
-            from know k
+            from [transoil].[dbo].[know] k
             order by k.knownum";
 try {
     $res = $mysqli->query($query);
@@ -22,7 +22,6 @@ try {
 }
 echo json_encode($list);
 
-if ($mysqli)
-    $mysqli->close();
+$conn = null;
 
 ?>

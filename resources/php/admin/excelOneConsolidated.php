@@ -24,15 +24,15 @@ $queryHeader = "select
               ELSE '?'
              END)  as result,
             c.balls,
-            (SELECT COUNT(*) FROM card t WHERE t.examid = e.examid AND t.userid = u.userid) AS numQuestions,
+            (SELECT COUNT(*) FROM [transoil].[dbo].[card] t WHERE t.examid = e.examid AND t.userid = u.userid) AS numQuestions,
             o.orgabbr
-          from exam e,
-               `usr` u,
-               speciality s,
-               class c,
-               `grp` g,
-               `activity` a,
-               `org` o
+          from [transoil].[dbo].[exam] e,
+               [transoil].[dbo].[usr] u,
+               [transoil].[dbo].[speciality] s,
+               [transoil].[dbo].[class] c,
+               [transoil].[dbo].[grp] g,
+               [transoil].[dbo].[activity] a,
+               [transoil].[dbo].[org] o
           where e.examid in ($examarr)
           and s.specid = u.specid
           and c.userid = u.userid
@@ -94,7 +94,6 @@ $number = 0;
 $excel .= $footer;
 echo $excel;
 
-if ($mysqli)
-    $mysqli->close();
+$conn = null;
 
 ?>

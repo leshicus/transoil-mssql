@@ -12,7 +12,7 @@ switch ($act) {
     case 'create':
         $timelimit = $data['timelimit'];
         $sql = "
-            insert into activity (timelimit) values ($timelimit);
+            insert into [transoil].[dbo].[activity] (timelimit) values ($timelimit);
         ";
         try {
             $res = $mysqli->query($sql);
@@ -38,7 +38,7 @@ switch ($act) {
                   actid,
                   orgid,
                   timelimit
-		        from activity
+		        from [transoil].[dbo].[activity]
 		        order by actnum';
         try {
             $res = $mysqli->query($sql);
@@ -65,7 +65,7 @@ switch ($act) {
         $timelimit = $data['timelimit'];
 
         $sql = "
-            update activity
+            update [transoil].[dbo].[activity]
             set actname = '$actname',
                 actabbr = '$actabbr',
                 actnum = '$actnum',
@@ -94,7 +94,7 @@ switch ($act) {
         $actid = $data['actid'];
 
         $sql = "
-            delete from activity
+            delete from [transoil].[dbo].[activity]
             where actid = '$actid'
         ";
         try {
@@ -117,7 +117,6 @@ switch ($act) {
         echo "default";
 };
 
-if ($mysqli)
-    $mysqli->close();
+$conn = null;
 
 ?>

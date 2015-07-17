@@ -63,7 +63,8 @@ if ($_FILES) {
 
                 if ($success && $questionid && $answertext != '') {
                     $sql = "
-                        insert into answer(
+                        insert into [transoil].[dbo].[answer]
+(
                           questionid,
                           answertext,
                           correct,
@@ -106,6 +107,5 @@ if($success){
 
 
 
-if ($mysqli)
-    $mysqli->close();
+$conn = null;
 ?>

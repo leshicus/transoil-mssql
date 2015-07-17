@@ -16,7 +16,7 @@ switch ($act) {
         // * определим ФИО наблюдателя
         $sql_fio = "select
           CONCAT_WS(' ',u.familyname,u.firstname,u.lastname) as fio
-        from `usr` u
+        from [transoil].[dbo].[usr] u
 		where u.userid = '$userid'";
         try {
             $res_fio = $mysqli->query($sql_fio);
@@ -30,7 +30,8 @@ switch ($act) {
         }
 
         $sql = "
-            insert into exam(
+            insert into [transoil].[dbo].[exam]
+(
               examdate,
               userid,
               orgid
@@ -75,10 +76,10 @@ switch ($act) {
         if ($testMode)
             $where .= " and e.orgid = (
                 select a.orgid
-                from `activity` a,
-                     `grp` g,
-                     `speciality` s,
-                     `usr` u
+                from [transoil].[dbo].[activity] a,
+                     [transoil].[dbo].[grp] g,
+                     [transoil].[dbo].[speciality] s,
+                     [transoil].[dbo].[usr] u
                 where a.actid = g.actid
                   and g.groupid = s.groupid
                   and s.specid = u.specid
@@ -93,9 +94,9 @@ switch ($act) {
                   u.login,
                   e.orgid,
                   o.orgabbr
-		        from `exam`   e,
-		             `usr` u,
-		             `org` o
+		        from [transoil].[dbo].[exam]   e,
+		             [transoil].[dbo].[usr] u,
+		             [transoil].[dbo].[org] o
 		        where o.orgid = e.orgid
 		        and u.userid = e.userid " . $where .
             " order by examdate desc";
@@ -121,7 +122,7 @@ switch ($act) {
         $examid = $data['examid'];
 
         $sql = "
-            update `exam`
+            update [transoil].[dbo].[exam]
             set orgid = '$orgid'
             where examid = '$examid'
         ";
@@ -144,7 +145,7 @@ switch ($act) {
         $examid = $data['examid'];
 
         $sql = "
-            delete from exam
+            delete from [transoil].[dbo].[exam]
             where examid = '$examid'
         ";
         try {
@@ -168,7 +169,6 @@ switch ($act) {
         echo "default";
 };
 
-if ($mysqli)
-    $mysqli->close();
+$conn = null;
 
 ?>

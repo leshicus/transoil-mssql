@@ -66,11 +66,14 @@ Ext.define('App.view.admin.formuser.FormUserC', {
             click: function (button) {
                 console.log('cancel button');
 
+                var grid = Ext.ComponentQuery.query('gridUser')[0],
+                    vmGrid = grid.getViewModel(),
+                    storeUser = vmGrid.getStore('user');
+                storeUser.rejectChanges();
                 button.up('form').getForm().reset();
                 button.up('window').close();
             }
         }
-
     },
     onRender: function (form) {
         var vm = form.getViewModel(),

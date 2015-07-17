@@ -14,8 +14,8 @@ $sql = '
        replace(a.answertext,"'.'&'.'","'.'#'.'") as answertext,
        replace(a.correct,"'.'&'.'","'.'#'.'") as correct,
        replace(a.normdoc,"'.'&'.'","'.'#'.'") as normdoc
-  FROM question q,
-       answer a
+  FROM [transoil].[dbo].[question] q,
+       [transoil].[dbo].[answer] a
   WHERE a.questionid = q.questionid
   AND q.questionid IN ('.$str.')';
 try {
@@ -55,6 +55,5 @@ header("Content-type: application/force-download");
 header('Content-Disposition:attachment; filename='.$filename);
 echo $xml;
 
-if ($mysqli)
-    $mysqli->close();
+$conn = null;
 ?>

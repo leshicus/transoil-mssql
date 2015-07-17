@@ -70,10 +70,10 @@ switch ($act) {
                   q.groupid,
                   q.knowid,
                   g.actid
-		        from question q
-                  LEFT JOIN `grp` g ON
+		        from [transoil].[dbo].[question] q
+                  LEFT JOIN [transoil].[dbo].[grp] g ON
                   g.groupid = q.groupid
-                  LEFT JOIN `activity` a ON
+                  LEFT JOIN [transoil].[dbo].[activity] a ON
                   a.actid = g.actid'.
                 $where;
         try {
@@ -100,7 +100,7 @@ switch ($act) {
             $knowid = $row['knowid'];
 
             $sql = "
-                update question
+                update [transoil].[dbo].[question]
                 set questiontext = '$questiontext',
                     groupid = '$groupid',
                     knowid = '$knowid'
@@ -129,7 +129,7 @@ switch ($act) {
             $questionid = $row['questionid'];
 
             $sql = "
-                delete from question
+                delete from [transoil].[dbo].[question]
                 where questionid = '$questionid'
             ";
             try {
@@ -153,7 +153,6 @@ switch ($act) {
         echo "default";
 };
 
-if ($mysqli)
-    $mysqli->close();
+$conn = null;
 
 ?>

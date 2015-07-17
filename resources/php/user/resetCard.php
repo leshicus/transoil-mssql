@@ -1,6 +1,6 @@
 <?
 session_start();
-/* 1. Отмена билета после ошибки, удаление его в `card`
+/* 1. Отмена билета после ошибки, удаление его в [transoil].[dbo].[card]
 * */
 require_once("../db_connect.php");
 require_once("../include.php");
@@ -8,7 +8,7 @@ require_once("../include.php");
 $userid = $_SESSION['userid'];
 $examid = $_REQUEST['examid'];
 
-$sql = "delete from `card`
+$sql = "delete from [transoil].[dbo].[card]
         where userid = '$userid'
         and examid = '$examid'";
 try {
@@ -26,8 +26,7 @@ if ($success) {
         array('success' => $success,
             'message' => $message));
 }
-if ($mysqli)
-    $mysqli->close();
+$conn = null;
 
 ?>
 

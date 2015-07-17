@@ -21,7 +21,8 @@ switch ($act) {
             $correct = 0;
 
         $sql = "
-                insert into answer(
+                insert into [transoil].[dbo].[answer]
+(
                   answertext,
                   questionid,
                   correct,
@@ -57,7 +58,7 @@ switch ($act) {
                   questionid,
                   correct,
                   normdoc
-		        from answer
+		        from [transoil].[dbo].[answer]
 		        where questionid='.$questionid;
         try {
             $res = $mysqli->query($sql);
@@ -90,7 +91,7 @@ switch ($act) {
         // * должен быть только один, занулим остальные
         //if($correct)
         $sql = "
-                update answer
+                update [transoil].[dbo].[answer]
                 set answertext = '$answertext',
                     questionid = '$questionid',
                     correct = '$correct',
@@ -117,7 +118,7 @@ switch ($act) {
         $answerid = $data['answerid'];
 
         $sql = "
-                delete from answer
+                delete from [transoil].[dbo].[answer]
                 where answerid = '$answerid'
             ";
         try {
@@ -141,7 +142,6 @@ switch ($act) {
 };
 
 
-if ($mysqli)
-    $mysqli->close();
+$conn = null;
 
 ?>

@@ -36,15 +36,15 @@ $queryHeader = "select
               ELSE '?'
              END)  as result,
             c.balls,
-            (SELECT COUNT(*) FROM card t WHERE t.examid = e.examid AND t.userid = u.userid) AS numQuestions,
+            (SELECT COUNT(*) FROM [transoil].[dbo].[card] t WHERE t.examid = e.examid AND t.userid = u.userid) AS numQuestions,
             o.orgabbr
-          from exam e,
-               `usr` u,
-               speciality s,
-               class c,
-               `grp` g,
-               `activity` a,
-               `org` o
+          from [transoil].[dbo].[exam] e,
+               [transoil].[dbo].[usr] u,
+               [transoil].[dbo].[speciality] s,
+               [transoil].[dbo].[class] c,
+               [transoil].[dbo].[grp] g,
+               [transoil].[dbo].[activity] a,
+               [transoil].[dbo].[org] o
           where e.examid = '$examid'
           and u.userid = '$userid'
           and s.specid = u.specid
@@ -72,7 +72,7 @@ try {
 
 $querySign = "select
             CONCAT(s.familyname,' ',SUBSTR(s.firstname,1,1),'.',SUBSTR(s.lastname,1,1),'.') as fio
-          from signgroup s
+          from [transoil].[dbo].[signgroup] s
           where s.examid = '$examid'
           ";
 try {
@@ -94,9 +94,9 @@ $queryQuestion = "select
               WHEN 1 THEN '+'
               ELSE '-' END
             ) AS correct
-          from card c
-            LEFT JOIN question q on q.questionid = c.questionid
-            LEFT JOIN answer a on a.answerid = c.answerid
+          from [transoil].[dbo].[card] c
+            LEFT JOIN [transoil].[dbo].[question] q on q.questionid = c.questionid
+            LEFT JOIN [transoil].[dbo].[answer] a on a.answerid = c.answerid
           where c.examid = '$examid'
           and c.userid = '$userid'
           ";
@@ -208,7 +208,6 @@ if($success){
     $p->output($filename,'I');
 }
 
-if ($mysqli)
-    $mysqli->close();
+$conn = null;
 
 ?>

@@ -10,7 +10,7 @@ $userid = $_SESSION['userid'];
 $examid = $_REQUEST['examid'];
 
 $query = "select count(*)
-          from card
+          from [transoil].[dbo].[card]
           where examid = '$examid'
           and userid = '$userid'";
 try {
@@ -35,7 +35,6 @@ if ($success) {
             'message' => $message));
 }
 
-if ($mysqli)
-    $mysqli->close();
+$conn = null;
 
 ?>

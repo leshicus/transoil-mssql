@@ -7,7 +7,7 @@ function _log($mysqli,$userid, $logtypeid, $parameter)
 {
     //$curdate = date('Y.m.d H:i');
     $sql = "
-         insert into `log`
+         insert into [transoil].[dbo].[log]
          (logdate, userid, parameter, logtypeid)
          values
          (NOW(), '$userid', '$parameter', '$logtypeid')
@@ -18,27 +18,27 @@ function _log($mysqli,$userid, $logtypeid, $parameter)
         $success = false;
     }
 }
-function _logtext($mysqli,$text)
-{
-    //$curdate = date('Y.m.d H:i');
-    $sql = "
-         insert into `logtext`
-         (lgtext,lgdate)
-         values
-         ('$text',NOW())
-        ";
-    try {
-        $res = $mysqli->query($sql);
-    } catch (Exception $e) {
-        $success = false;
-    }
-}
+//function _logtext($mysqli,$text)
+//{
+//    //$curdate = date('Y.m.d H:i');
+//    $sql = "
+//         insert into `logtext`
+//         (lgtext,lgdate)
+//         values
+//         ('$text',NOW())
+//        ";
+//    try {
+//        $res = $mysqli->query($sql);
+//    } catch (Exception $e) {
+//        $success = false;
+//    }
+//}
 
 function _getSubsystemName($mysqli,$subsystemid)
 {
     $sql = '
          select s.subsystemname
-         from `subsystem` s
+         from [transoil].[dbo].[subsystem] s
          where s.subsystemid = '.$subsystemid;
     try {
         $res = $mysqli->query($sql);
@@ -56,7 +56,7 @@ function _getUserName($mysqli,$userid)
                 u.firstname,
                 u.lastname,
                 u.login
-         from `usr` u
+         from [transoil].[dbo].[usr] u
          where u.userid = '.$userid;
     try {
         $res = $mysqli->query($sql);
@@ -72,7 +72,7 @@ function _getSpecname($mysqli,$specid)
 {
     $sql = '
          select u.specname
-         from `speciality` u
+         from [transoil].[dbo].[speciality] u
          where u.specid = '.$specid;
     try {
         $res = $mysqli->query($sql);
@@ -87,7 +87,7 @@ function _getRolename($mysqli,$roleid)
 {
     $sql = '
          select u.rolename
-         from `role` u
+         from [transoil].[dbo].[role] u
          where u.roleid = '.$roleid;
     try {
         $res = $mysqli->query($sql);

@@ -10,7 +10,7 @@ $data = json_decode(file_get_contents('php://input'), true);
 switch ($act) {
     case 'create':
         $sql = "
-            insert into `grp`()values();
+            insert into [transoil].[dbo].[grp]()values();
         ";
         try {
             $res = $mysqli->query($sql);
@@ -39,7 +39,7 @@ switch ($act) {
                     WHERE gk.groupid = g.groupid
                   ) AS knowids*/
                   g.knowids
-		        from `grp` g
+		        from [transoil].[dbo].[grp] g
 		        order by g.actid, g.groupnum';
         try {
             $res = $mysqli->query($sql);
@@ -71,7 +71,7 @@ switch ($act) {
             $knowids = implode($knowids,',');
 
         $sql = "
-            update `grp`
+            update [transoil].[dbo].[grp]
             set actid = '$actid',
                 groupnum = '$groupnum',
                 groupname = '$groupname',
@@ -99,7 +99,7 @@ switch ($act) {
         $groupid = $data['groupid'];
 
         $sql = "
-            delete from `grp`
+            delete from [transoil].[dbo].[grp]
             where groupid = '$groupid'
         ";
         try {
@@ -122,7 +122,6 @@ switch ($act) {
         echo "default";
 };
 
-if ($mysqli)
-    $mysqli->close();
+$conn = null;
 
 ?>

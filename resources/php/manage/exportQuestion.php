@@ -20,8 +20,8 @@ if($str){
        a.answertext,
        a.correct,
        a.normdoc
-  FROM question q,
-       answer a
+  FROM [transoil].[dbo].[question] q,
+       [transoil].[dbo].[answer] a
   WHERE a.questionid = q.questionid
   AND q.questionid IN (".$str.")";
     try {
@@ -93,6 +93,5 @@ if($str){
 }
 
 
-if ($mysqli)
-    $mysqli->close();
+$conn = null;
 ?>

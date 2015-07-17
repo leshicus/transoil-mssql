@@ -12,7 +12,7 @@ switch ($act) {
         $examid = $data['examid'];
 
         $sql = "
-            insert into `signgroup`(
+            insert into [transoil].[dbo].[signgroup] (
               examid
             )values(
               '$examid'
@@ -47,7 +47,7 @@ switch ($act) {
                   firstname,
                   lastname,
                   CONCAT_WS(' ',familyname,firstname,lastname) as fio
-		        from `signgroup`"
+		        from [transoil].[dbo].[signgroup] "
 		        .$where.
 		        " order by familyname, firstname";
         //echo $sql;
@@ -78,7 +78,7 @@ switch ($act) {
         if(!$lastname) $lastname = null;
 
         $sql = "
-            update `signgroup`
+            update [transoil].[dbo].[signgroup]
             set familyname = '$familyname',
                 firstname = '$firstname',
                 lastname = '$lastname'
@@ -104,7 +104,7 @@ switch ($act) {
         $signgroupid = $data['signgroupid'];
 
         $sql = "
-            delete from `signgroup`
+            delete from [transoil].[dbo].[signgroup]
             where signgroupid = '$signgroupid'
         ";
         try {
@@ -120,7 +120,6 @@ switch ($act) {
         echo "default";
 };
 
-if ($mysqli)
-    $mysqli->close();
+$conn = null;
 
 ?>

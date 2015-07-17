@@ -77,7 +77,8 @@ if ($_FILES) {
                 if ($answertext == '') $answertext = '0';
                 if ($success && $questionid) {
                     $sql = "
-                        insert into answer(
+                        insert into [transoil].[dbo].[answer]
+(
                           questionid,
                           answertext,
                           correct,
@@ -110,7 +111,7 @@ if ($_FILES) {
 
             //echo print_r($answertext.$answerid.$normdoc);
             $sql = "
-                        update answer a
+                        update [transoil].[dbo].[answer] a
                         set a.correct = 1,
                             a.normdoc = '$normdoc'
                         where a.questionid = '$questionid'
@@ -148,6 +149,5 @@ if($success){
 
 
 
-if ($mysqli)
-    $mysqli->close();
+$conn = null;
 ?>

@@ -9,11 +9,11 @@ $org = $_REQUEST['org'];
 /*$sql = "
     SELECT k.knowname as name,
     (SELECT COUNT(*)
-      FROM `grp` g,
-      card c,
-      question q,
-      answer a,
-      activity v
+      FROM [transoil].[dbo].[grp] g,
+      [transoil].[dbo].[card] c,
+      [transoil].[dbo].[question] q,
+      [transoil].[dbo].[answer] a,
+      [transoil].[dbo].[activity] v
       WHERE '$act' = v.actabbr
       and v.actid = g.actid
       AND q.questionid = c.questionid
@@ -23,23 +23,23 @@ $org = $_REQUEST['org'];
       AND a.correct = 1
       AND c.userid IN (
         SELECT c.userid
-        FROM exam e,
-          class c
+        FROM [transoil].[dbo].[exam] e,
+          [transoil].[dbo].[class] c
         WHERE e.examdate BETWEEN '$dateFrom' AND '$dateTo'
           AND c.examid = e.examid
           AND c.result <> -1
       )) AS data
-    FROM know k
+    FROM [transoil].[dbo].[know] k
     HAVING data>0
 ";*/
 $sql = "
     SELECT k.knowname as name,
     ((SELECT COUNT(*)
-      FROM `grp` g,
-      card c,
-      question q,
-      answer a,
-      activity v
+      FROM [transoil].[dbo].[grp] g,
+      [transoil].[dbo].[card] c,
+      [transoil].[dbo].[question] q,
+      [transoil].[dbo].[answer] a,
+      [transoil].[dbo].[activity] v
       WHERE '$act' = v.actabbr
       AND v.orgid = '$org'
       and v.actid = g.actid
@@ -50,23 +50,23 @@ $sql = "
       AND a.correct = 1
       AND c.userid IN (
         SELECT c.userid
-        FROM exam e,
-          class c
+        FROM [transoil].[dbo].[exam] e,
+          [transoil].[dbo].[class] c
         WHERE e.examdate BETWEEN '$dateFrom' AND '$dateTo'
           AND c.examid = e.examid
           AND c.result <> -1
       ))
       /
     (SELECT COUNT(*)
-      FROM question q,
-      `grp` g,
-      activity a
+      FROM [transoil].[dbo].[question] q,
+      [transoil].[dbo].[grp] g,
+      [transoil].[dbo].[activity] a
       WHERE q.knowid = k.knowid
         AND a.orgid = '$org'
         AND q.groupid = g.groupid
         AND a.actid = g.actid
         AND a.actabbr = '$act')) * 10000 AS data
-    FROM know k
+    FROM [transoil].[dbo].[know] k
     HAVING data>0
 ";
 

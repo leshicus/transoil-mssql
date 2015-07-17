@@ -10,7 +10,7 @@ $examid = $_REQUEST['examid'];
 
 $query = "select
             count(*) as cnt
-          from class c
+          from [transoil].[dbo].[class] c
           where c.examid = '$examid'
           and   c.userid = '$userid'
           and   c.reg = 1";
@@ -20,12 +20,12 @@ try {
     $cnt = $row[0];
     if ($cnt != 0){
         $query = "select a.timelimit
-                from `usr` u
-                  LEFT JOIN `speciality` s ON
+                from [transoil].[dbo].[usr] u
+                  LEFT JOIN [transoil].[dbo].[speciality] s ON
                     u.specid = s.specid
-                  LEFT JOIN `grp` g ON
+                  LEFT JOIN [transoil].[dbo].[grp] g ON
                     g.groupid = s.groupid
-                  LEFT JOIN `activity` a ON
+                  LEFT JOIN [transoil].[dbo].[activity] a ON
                     a.actid = g.actid
                 where u.userid = '$userid'";
         try {
@@ -51,7 +51,6 @@ if ($success) {
             'message' => $sql));
 }
 
-if ($mysqli)
-    $mysqli->close();
+$conn = null;
 
 ?>

@@ -14,7 +14,7 @@ switch ($act) {
         $groupnum = $data['groupnum'];
 
         $sql = "
-            insert into `grp`(
+            insert into [transoil].[dbo].[grp](
               actid,
               groupnum
             )values(
@@ -52,11 +52,11 @@ switch ($act) {
                   u.login,
                   reg,
                   a.timelimit
-		        from `class` c,
-		             `usr`  u,
-		             `activity` a,
-		             `speciality` s,
-		             `grp` g
+		        from [transoil].[dbo].[class] c,
+		             [transoil].[dbo].[usr]  u,
+		             [transoil].[dbo].[activity] a,
+		             [transoil].[dbo].[speciality] s,
+		             [transoil].[dbo].[grp] g
 		        where u.userid = c.userid
                 and s.specid = u.specid
                 and g.groupid = s.groupid
@@ -93,7 +93,7 @@ switch ($act) {
             // * проверим, может человек уже прошел экзамен
             $sql = "
                     select count(*) as cnt
-                    from `class`
+                    from [transoil].[dbo].[class]
                     where userid = '$userid'
                     and examid = '$examid'
                     and (result is null
@@ -109,7 +109,7 @@ switch ($act) {
 
             if($result != 0){
                 $sql = "
-                    update `class`
+                    update [transoil].[dbo].[class]
                     set reg = '$reg'
                     where userid = '$userid'
                     and examid = '$examid'
@@ -140,7 +140,7 @@ switch ($act) {
             $examid = $row['examid'];
             $userid = $row['userid'];
             $sql = "
-                delete from `class`
+                delete from [transoil].[dbo].[class]
                 where userid = '$userid'
                 and examid = '$examid'
             ";
@@ -151,7 +151,7 @@ switch ($act) {
             }
             // * удаление билета
             $sql = "
-                delete from `card`
+                delete from [transoil].[dbo].[card]
                 where userid = '$userid'
                 and examid = '$examid'
             ";
@@ -175,7 +175,6 @@ switch ($act) {
         echo "default";
 };
 
-if ($mysqli)
-    $mysqli->close();
+$conn = null;
 
 ?>

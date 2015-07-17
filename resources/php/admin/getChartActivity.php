@@ -8,21 +8,21 @@ $org = $_REQUEST['org'];
 /*$sql = "SELECT
     a.actabbr as name,
     (SELECT COUNT(*)
-          FROM `usr` u,
-          speciality s,
-          `grp` g
+          FROM [transoil].[dbo].[usr] u,
+          [transoil].[dbo].[speciality] s,
+          [transoil].[dbo].[grp] g
           WHERE u.specid = s.specid
           AND g.groupid = s.groupid
           AND a.actid = g.actid
           AND u.userid IN (
             SELECT c.userid
-            FROM exam e,
-              class c
+            FROM [transoil].[dbo].[exam] e,
+              [transoil].[dbo].[class] c
             WHERE e.examdate BETWEEN '$dateFrom' AND '$dateTo'
               AND c.examid = e.examid
               AND c.result <> -1
           )) AS data
-  FROM activity a
+  FROM [transoil].[dbo].[activity] a
   HAVING data>0
 ";
 
@@ -42,7 +42,7 @@ try {
 
 // * получим максимальное количество групп
 $sql = 'SELECT MAX(g.groupnum) as groupnum
-        FROM `grp` g';
+        FROM [transoil].[dbo].[grp] g';
 try {
     $res = $mysqli->query($sql);
     $row = $res->fetch_row();
@@ -61,16 +61,16 @@ $sql = 'SELECT
 for($i = 1; $i <= $groupnum; $i++){
     $sql .= "
     (SELECT COUNT(*)
-          FROM `usr` u,
-          speciality s,
-          `grp` g
+          FROM [transoil].[dbo].[usr] u,
+          [transoil].[dbo].[speciality] s,
+          [transoil].[dbo].[grp] g
           WHERE u.specid = s.specid
           AND g.groupid = s.groupid
           AND a.actid = g.actid
           AND u.userid IN (
             SELECT c.userid
-            FROM exam e,
-              class c
+            FROM [transoil].[dbo].[exam] e,
+              [transoil].[dbo].[class] c
             WHERE e.examdate BETWEEN '".$dateFrom."' AND '".$dateTo."'
               AND c.examid = e.examid
               AND c.result <> -1
@@ -82,7 +82,7 @@ for($i = 1; $i <= $groupnum; $i++){
 }
 
 $sql .= '
-  FROM activity a
+  FROM [transoil].[dbo].[activity] a
   HAVING группа_1 > 0
 ';
 

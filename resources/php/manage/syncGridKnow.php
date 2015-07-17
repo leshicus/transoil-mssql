@@ -34,7 +34,7 @@ switch ($act) {
                   knowname,
                   knownum,
                   knowfullname
-		        from know
+		        from [transoil].[dbo].[know]
 		        order by knownum';
         try {
             $res = $mysqli->query($sql);
@@ -59,7 +59,7 @@ switch ($act) {
         $knowid = $data['knowid'];
 
         $sql = "
-            update know
+            update [transoil].[dbo].[know]
             set knowname = '$knowname',
                 knownum = '$knownum',
                 knowfullname = '$knowfullname'
@@ -85,7 +85,7 @@ switch ($act) {
         $knowid = $data['knowid'];
 
         $sql = "
-            delete from know
+            delete from [transoil].[dbo].[know]
             where knowid = '$knowid'
         ";
         try {
@@ -107,7 +107,6 @@ switch ($act) {
         break;
 };
 
-if ($mysqli)
-    $mysqli->close();
+$conn = null;
 
 ?>

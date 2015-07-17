@@ -9,10 +9,10 @@ $org = $_REQUEST['org'];
 $sql = "SELECT
     a.actabbr as name,
     (SELECT COUNT(*)
-          FROM `usr` u,
-          speciality s,
-          `grp` g,
-          class c
+          FROM [transoil].[dbo].[usr] u,
+          [transoil].[dbo].[speciality] s,
+          [transoil].[dbo].[grp] g,
+          [transoil].[dbo].[class] c
           WHERE u.specid = s.specid
           AND g.groupid = s.groupid
           AND a.actid = g.actid
@@ -20,14 +20,14 @@ $sql = "SELECT
           AND c.result = 0
           AND u.userid IN (
             SELECT c.userid
-            FROM exam e,
-              class c
+            FROM [transoil].[dbo].[exam] e,
+              [transoil].[dbo].[class] c
             WHERE e.examdate BETWEEN '$dateFrom' AND '$dateTo'
               AND c.examid = e.examid
               AND c.result <> -1
           )) AS data,
     'не успешно' as result
-  FROM activity a
+  FROM [transoil].[dbo].[activity] a
   WHERE a.actabbr = '$act'
   AND a.orgid = '$org'
   HAVING data>0
@@ -35,10 +35,10 @@ $sql = "SELECT
   SELECT
     a.actabbr as name,
     (SELECT COUNT(*)
-          FROM `usr` u,
-          speciality s,
-          `grp` g,
-          class c
+          FROM [transoil].[dbo].[usr] u,
+          [transoil].[dbo].[speciality] s,
+          [transoil].[dbo].[grp] g,
+          [transoil].[dbo].[class] c
           WHERE u.specid = s.specid
           AND g.groupid = s.groupid
           AND a.actid = g.actid
@@ -46,14 +46,14 @@ $sql = "SELECT
           AND c.result = 1
           AND u.userid IN (
             SELECT c.userid
-            FROM exam e,
-              class c
+            FROM [transoil].[dbo].[exam] e,
+              [transoil].[dbo].[class] c
             WHERE e.examdate BETWEEN '$dateFrom' AND '$dateTo'
               AND c.examid = e.examid
               AND c.result <> -1
           )) AS data,
     'успешно' as result
-  FROM activity a
+  FROM [transoil].[dbo].[activity] a
   WHERE a.actabbr = '$act'
   AND a.orgid = '$org'
   HAVING data>0

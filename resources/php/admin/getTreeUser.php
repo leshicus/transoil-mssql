@@ -8,7 +8,7 @@ $orgQuery = "
               a.orgid,
               a.orgname,
               a.orgabbr
-            from org a
+            from [transoil].[dbo].[org] a
             order by a.orgabbr
         ";
 try {
@@ -33,7 +33,7 @@ $actQuery = "
               a.actnum,
               a.orgid,
               a.actabbr
-            from activity a
+            from [transoil].[dbo].[activity] a
             order by a.actnum
         ";
 try {
@@ -57,7 +57,7 @@ $groupQuery = "
               g.groupid,
               g.groupname,
               g.groupnum
-            from `grp` g
+            from [transoil].[dbo].[grp] g
             order by g.groupnum
         ";
 try {
@@ -189,6 +189,5 @@ $out .= '
 
 echo $out;
 
-if ($mysqli)
-    $mysqli->close();
+$conn = null;
 ?>

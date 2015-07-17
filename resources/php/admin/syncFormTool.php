@@ -9,7 +9,7 @@ $userid = $_SESSION['userid'];
 switch ($act) {
     case 'read':
         $sql = "select *
-		        from `tool` u";
+		        from [transoil].[dbo].[tool] u";
         try {
             $res = $mysqli->query($sql);
             $list = array();
@@ -32,9 +32,9 @@ switch ($act) {
         }
 
         $values .= "toolid = toolid";
-        $sql = "update `tool`
+        $sql = "update [transoil].[dbo].[tool]
                     set ".$values;*/
-        $sql = "update `tool`
+        $sql = "update [transoil].[dbo].[tool]
                 set examtimermin = " . $data['examtimermin'] . ',' . "
                 maxquestion = " . $data['maxquestion'] . ',' . "
                 minquestion = " . $data['minquestion'] . ',' . "
@@ -64,7 +64,6 @@ switch ($act) {
         echo "default";
 };
 
-if ($mysqli)
-    $mysqli->close();
+$conn = null;
 
 ?>

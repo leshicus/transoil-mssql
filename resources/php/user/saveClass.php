@@ -11,7 +11,7 @@ $balls = $_REQUEST['balls'];
 $result = $_REQUEST['result'];
 
 $sql = "
-    update class
+    update [transoil].[dbo].[class]
     set balls = '$balls',
     result = '$result'
     where userid = '$userid'
@@ -31,8 +31,7 @@ if ($success) {
             'message' => $message));
 }
 
-if ($mysqli)
-    $mysqli->close();
+$conn = null;
 
 ?>
 

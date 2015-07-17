@@ -13,9 +13,9 @@ if ($answerid) { // * указан ответ
     SELECT a.correct,
           a1.normdoc,
           a1.answertext
-    FROM `answer` a,
-      `question` q,
-      `answer` a1
+    FROM [transoil].[dbo].[answer] a,
+      [transoil].[dbo].[question] q,
+      [transoil].[dbo].[answer] a1
     WHERE q.questionid = a.questionid
       AND a.answerid = '$answerid'
       AND a1.questionid = q.questionid
@@ -25,8 +25,8 @@ if ($answerid) { // * указан ответ
     SELECT null,
            a1.normdoc,
            a1.answertext
-    FROM `question` q,
-      `answer` a1
+    FROM [transoil].[dbo].[question] q,
+      [transoil].[dbo].[answer] a1
     WHERE q.questionid = '$questionid'
       AND a1.questionid = q.questionid
       AND a1.correct = 1";
@@ -50,7 +50,6 @@ if ($success) {
             'message' => $sql));
 }
 
-if ($mysqli)
-    $mysqli->close();
+$conn = null;
 
 ?>

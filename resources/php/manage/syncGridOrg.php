@@ -28,10 +28,10 @@ switch ($act) {
             $success = false;
         }
 
-        if($success){
+        if ($success) {
             echo json_encode(
                 array('orgid' => $mysqli->insert_id));
-        }else{
+        } else {
             echo json_encode(
                 array('success' => $success,
                     'message' => $sql));
@@ -42,15 +42,15 @@ switch ($act) {
                   orgid,
                   orgname,
                   orgabbr
-		        from org
+		        from [transoil].[dbo].[org]
 		        order by orgabbr';
+
         try {
-            $res = $mysqli->query($sql);
-            $list=array();
-            while ($row = $res->fetch_array(MYSQLI_ASSOC)) {
-                foreach ($row as $k => $v)
-                    $arr[$k]= $v;
-                array_push($list, $arr);
+            $list = array();
+            $res = $conn->query($sql);
+            $res->setFetchMode(PDO::FETCH_ASSOC);
+            while($row = $res->fetch()) {
+                array_push($list, $row);
             }
         } catch (Exception $e) {
             $success = false;
@@ -66,7 +66,7 @@ switch ($act) {
         $orgid = $data['orgid'];
 
         $sql = "
-            update org
+            update [transoil].[dbo].[org]
             set orgname = '$orgname',
                 orgabbr = '$orgabbr'
             where orgid = '$orgid'
@@ -76,11 +76,11 @@ switch ($act) {
         } catch (Exception $e) {
             $success = false;
         }
-        if($success){
+        if ($success) {
             echo json_encode(
                 array('success' => $success,
                     'message' => $sql));
-        }else{
+        } else {
             echo json_encode(
                 array('success' => $success,
                     'message' => $sql));
@@ -90,7 +90,7 @@ switch ($act) {
         $orgid = $data['orgid'];
 
         $sql = "
-            delete from org
+            delete from [transoil].[dbo].[org]
             where orgid = '$orgid'
         ";
         try {
@@ -99,10 +99,10 @@ switch ($act) {
             $success = false;
         }
 
-        if($success){
+        if ($success) {
             echo json_encode(
                 array('success' => $success));
-        }else{
+        } else {
             echo json_encode(
                 array('success' => $success,
                     'message' => $sql));
@@ -112,7 +112,9 @@ switch ($act) {
         break;
 };
 
-if ($mysqli)
-    $mysqli->close();
+//if ($mysqli)
+//    $mysqli->close();
 
+//sqlsrv_close($conn);
+$conn = null;
 ?>

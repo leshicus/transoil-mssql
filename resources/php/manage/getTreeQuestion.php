@@ -8,7 +8,7 @@ $orgQuery = "
               a.orgid,
               a.orgname,
               a.orgabbr
-            from org a
+            from [transoil].[dbo].[org] a
             order by a.orgabbr
         ";
 try {
@@ -33,7 +33,7 @@ $actQuery = "
               a.actnum,
               a.orgid,
               a.actabbr
-            from activity a
+            from [transoil].[dbo].[activity] a
             order by a.actnum
         ";
 try {
@@ -58,7 +58,7 @@ $groupQuery = "
               g.groupname,
               g.groupnum,
               g.knowids
-            from `grp` g
+            from [transoil].[dbo].[grp] g
             order by g.groupnum
         ";
 try {
@@ -85,7 +85,7 @@ foreach ($groupList as $groupId => $group) {
               k.knowid,
               k.knownum,
               k.knowname
-            from know k
+            from [transoil].[dbo].[know] k
             where k.knowid in (" . $knowids . ")
             order by k.knownum
         ";
@@ -212,6 +212,5 @@ $out .= '
 echo $out;
 
 
-if ($mysqli)
-    $mysqli->close();
+$conn = null;
 ?>

@@ -8,7 +8,7 @@ $success = true;
 $userid = $_SESSION['userid'];
 $examid = $_REQUEST['examid'];
 
-$query = "insert ignore into class
+$query = "insert ignore into [transoil].[dbo].[class]
             (examid, userid)
             values
             ('$examid','$userid')";
@@ -28,7 +28,6 @@ if ($success) {
             'message' => $sql));
 }
 
-if ($mysqli)
-    $mysqli->close();
+$conn = null;
 
 ?>

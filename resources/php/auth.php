@@ -21,7 +21,7 @@ if (strtoupper($textPassword) == strtoupper($initPassword)) {
     // * проверим, что пользователь зарегистрирован
     $sql_reg = "
      select u.userid
-     from `usr` u
+     from [transoil].[dbo].[usr] u
      where u.login = '$textLogin'
      and (u.enddate is null or u.enddate = '0000-00-00 00:00:00')
     ";
@@ -38,8 +38,8 @@ if (strtoupper($textPassword) == strtoupper($initPassword)) {
         // * Проверим доступ к подсистеме
         $sql_sys = "
          select count(*) as nCNT
-         from `usr`     u,
-              roleaccess ra
+         from [transoil].[dbo].[usr]     u,
+              [transoil].[dbo].[roleaccess] ra
          where u.userid = '$userid'
          and   ra.roleid = u.roleid
          and   ra.subsystemid = '$comboSystem'
@@ -52,7 +52,7 @@ if (strtoupper($textPassword) == strtoupper($initPassword)) {
             //echo $passSha1;
             $sql_pas = "
              select count(*) as nCNT
-             from `usr`     u
+             from [transoil].[dbo].[usr]     u
              where u.userid = '$userid'
              and   u.password = '$passSha1'
             ";
@@ -71,7 +71,7 @@ if (strtoupper($textPassword) == strtoupper($initPassword)) {
                 // * узнаем ФИО пользователя, чтобы вернуть в программу
                 $sql_fio = "
                      select CONCAT(u.familyname,' ',u.firstname,' ',u.lastname) as fio
-                     from `usr`     u
+                     from [transoil].[dbo].[usr]     u
                      where u.userid = '$userid'
                     ";
                 try {

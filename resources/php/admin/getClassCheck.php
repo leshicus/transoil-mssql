@@ -10,7 +10,7 @@ $examid = $_REQUEST['examid'];
 
 $query = "select
             count(*) as cnt
-          from class c
+          from [transoil].[dbo].[class] c
           where c.examid = '$examid'
           and   c.userid = '$userid'
           and   c.reg = 1";
@@ -31,7 +31,6 @@ if ($success) {
             'message' => $sql));
 }
 
-if ($mysqli)
-    $mysqli->close();
+$conn = null;
 
 ?>

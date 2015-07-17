@@ -43,11 +43,11 @@ switch ($act) {
                   a.orgid,
                   a.actid,
                   o.orgid
-		        from `usr` u
-		         left join `speciality` s on s.specid = u.specid
-		         left join `grp` g on g.groupid = s.groupid
-		         left join `activity` a on a.actid = g.actid
-		         left join `org` o on o.orgid = a.orgid "
+		        from [transoil].[dbo].[usr] u
+		         left join [transoil].[dbo].[speciality] s on s.specid = u.specid
+		         left join [transoil].[dbo].[grp] g on g.groupid = s.groupid
+		         left join [transoil].[dbo].[activity] a on a.actid = g.actid
+		         left join [transoil].[dbo].[org] o on o.orgid = a.orgid "
 		         .$where.
 		        " order by u.familyname, u.firstname, u.lastname, u.begindate";
        // echo $sql;
@@ -111,9 +111,9 @@ switch ($act) {
                        r.roleid,
                        r.rolename,
                        u.password
-                from `usr` u
-                  LEFT JOIN `speciality` s ON s.specid = u.specid
-                  LEFT JOIN `role` r ON r.roleid = u.roleid
+                from [transoil].[dbo].[usr] u
+                  LEFT JOIN [transoil].[dbo].[speciality] s ON s.specid = u.specid
+                  LEFT JOIN [transoil].[dbo].[role] r ON r.roleid = u.roleid
                 where u.userid = '.$userid;
             //echo $sql;
             try {
@@ -135,7 +135,7 @@ switch ($act) {
             if(!$password){
                 $password = $initPassword;
                 $sql = "
-                    update `usr`
+                    update [transoil].[dbo].[usr]
                     set familyname = '$familyname',
                         firstname = '$firstname',
                         lastname = '$lastname',
@@ -147,7 +147,7 @@ switch ($act) {
                 ";
             }else{
                 $sql = "
-                    update `usr`
+                    update [transoil].[dbo].[usr]
                     set familyname = '$familyname',
                         firstname = '$firstname',
                         lastname = '$lastname',
@@ -203,7 +203,7 @@ switch ($act) {
             $fio = $familyname . ' ' . $firstname . ' ' . $lastname . ' (' . $login . ')';
 
             $sql = "
-                delete from `usr`
+                delete from [transoil].[dbo].[usr]
                 where userid = '$userid'
             ";
             try {
@@ -227,7 +227,6 @@ switch ($act) {
         echo "default";
 };
 
-if ($mysqli)
-    $mysqli->close();
+$conn = null;
 
 ?>

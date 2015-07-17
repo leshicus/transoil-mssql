@@ -10,7 +10,7 @@ $questionid = $_REQUEST['questionid'];
 $answerid = $_REQUEST['answerid'];
 
 $sql = "
-    update card
+    update [transoil].[dbo].[card]
     set answerid = '$answerid'
     where userid = '$userid'
     and examid = '$examid'
@@ -30,8 +30,7 @@ if ($success) {
             'message' => $message));
 }
 
-if ($mysqli)
-    $mysqli->close();
+$conn = null;
 
 ?>
 

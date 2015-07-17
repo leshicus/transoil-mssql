@@ -1,6 +1,6 @@
 <?
 session_start();
-/* 1. Создание билета, сохранение его в `card`
+/* 1. Создание билета, сохранение его в [transoil].[dbo].[card]
 * */
 require_once("../db_connect.php");
 require_once("../include.php");
@@ -24,9 +24,9 @@ if (isset($know)) { // самоподготовка
                 (select
                     q.questionid
                 from
-                    `usr` u,
-                    `speciality` s,
-                    `question` q
+                    [transoil].[dbo].[usr] u,
+                    [transoil].[dbo].[speciality] s,
+                    [transoil].[dbo].[question] q
                 where u.userid = '$userid'
                 and s.specid = u.specid
                 and q.knowid = '$know'
@@ -41,9 +41,9 @@ if (isset($know)) { // самоподготовка
                 (select
                     q.questionid
                 from
-                    `usr` u,
-                    `speciality` s,
-                    `question` q
+                    [transoil].[dbo].[usr] u,
+                    [transoil].[dbo].[speciality] s,
+                    [transoil].[dbo].[question] q
                 where u.userid = '$userid'
                 and s.specid = u.specid
                 and q.groupid = s.groupid
@@ -71,8 +71,8 @@ if (isset($know)) { // самоподготовка
             a.normdoc*/
             /*@n:=@n+1 as rownum*/
         from
-            `question` q,
-            `answer` a
+            [transoil].[dbo].[question] q,
+            [transoil].[dbo].[answer] a
         where a.questionid = q.questionid
         and q.questionid in (" . $str . ")";
         //echo $sql;
@@ -109,7 +109,7 @@ if (isset($know)) { // самоподготовка
     $sql = "
         select
             maxquestion
-        from `tool` t
+        from [transoil].[dbo].[tool] t
         where t.toolid = 1";
     try {
         $res = $mysqli->query($sql);
@@ -124,9 +124,9 @@ if (isset($know)) { // самоподготовка
                     (select
                         q.questionid
                     from
-                        `usr` u,
-                        `speciality` s,
-                        `question` q
+                        [transoil].[dbo].[usr] u,
+                        [transoil].[dbo].[speciality] s,
+                        [transoil].[dbo].[question] q
                     where u.userid = '$userid'
                     and s.specid = u.specid
                     and q.groupid = s.groupid
@@ -148,8 +148,8 @@ if (isset($know)) { // самоподготовка
                             a.normdoc*/
                             /*@n:=@n+1 as rownum*/
                         from
-                            `question` q,
-                            `answer` a
+                            [transoil].[dbo].[question] q,
+                            [transoil].[dbo].[answer] a
                         where a.questionid = q.questionid
                         and q.questionid in (" . $str . ")";
                     try {
@@ -161,7 +161,7 @@ if (isset($know)) { // самоподготовка
                             array_push($list, $arr);
                         }
                         if (count($list) > 0) {
-                            // * сохраним в card сгенерированные вопросы по билету
+                            // * сохраним в [transoil].[dbo].[card] сгенерированные вопросы по билету
                             $questionid = null;
                             $cnt = 0;
                             foreach ($list as $k => $row) {
@@ -171,7 +171,7 @@ if (isset($know)) { // самоподготовка
                                 } else {
                                     $questionid = $row['questionid'];
 
-                                    $sql = "insert into `card`
+                                    $sql = "insert into [transoil].[dbo].[card]
                                         (userid, examid, questionid)
                                         values
                                         ('$userid', '$examid', '$questionid')";
@@ -220,8 +220,7 @@ if ($success) {
             'message' => $message));
 }
 
-if ($mysqli)
-    $mysqli->close();
+$conn = null;
 
 ?>
 
