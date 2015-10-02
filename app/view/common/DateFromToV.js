@@ -19,8 +19,8 @@ Ext.define('App.view.common.DateFromToV', {
                 width: 140,
                 value: this._dateFrom,
                 allowBlank:this._allowBlankFrom,
-                format: 'd.m.Y H:i',
-                altFormats: 'd.m.Y H:i'
+                format: 'd.m.Y H:i'
+                //altFormats: 'd.m.Y H:i'
             },
             {
                 xtype: 'datefield',

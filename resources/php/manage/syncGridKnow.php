@@ -11,17 +11,17 @@ $success = true;
 switch ($act) {
     case 'create':
         $sql = "
-            insert into know()values();
+            insert [transoil].[dbo].[know]()values();
         ";
         try {
-            $res = $mysqli->query($sql);
+            $res = $conn->query($sql);
         } catch (Exception $e) {
             $success = false;
         }
 
         if($success){
             echo json_encode(
-                array('knowid' => $mysqli->insert_id));
+                array('knowid' => $conn->lastInsertId()));
         }else{
             echo json_encode(
                 array('success' => $success,
@@ -36,21 +36,8 @@ switch ($act) {
                   knowfullname
 		        from [transoil].[dbo].[know]
 		        order by knownum';
-        try {
-            $res = $mysqli->query($sql);
-            $list=array();
-            while ($row = $res->fetch_array(MYSQLI_ASSOC)) {
-                foreach ($row as $k => $v)
-                    $arr[$k]= $v;
-                array_push($list, $arr);
-            }
-        } catch (Exception $e) {
-            $success = false;
-            echo json_encode(
-                array('success' => $success,
-                    'message' => $sql));
-        }
-        echo json_encode($list);
+
+        echo json_encode(_read($conn,$sql));
         break;
     case 'update':
         $knowname = $data['knowname'];
@@ -66,7 +53,7 @@ switch ($act) {
             where knowid = '$knowid'
         ";
         try {
-            $res = $mysqli->query($sql);
+            $res = $conn->query($sql);
         } catch (Exception $e) {
             $success = false;
         }
@@ -89,7 +76,7 @@ switch ($act) {
             where knowid = '$knowid'
         ";
         try {
-            $res = $mysqli->query($sql);
+            $res = $conn->query($sql);
         } catch (Exception $e) {
             $success = false;
         }

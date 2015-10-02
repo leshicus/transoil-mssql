@@ -14,7 +14,7 @@ switch ($act) {
         $orgabbr = $data['orgabbr'];
 
         $sql = "
-            insert into org(
+            insert [transoil].[dbo].[org](
               orgname,
               orgabbr
             )values(
@@ -23,14 +23,14 @@ switch ($act) {
             );
         ";
         try {
-            $res = $mysqli->query($sql);
+            $res = $conn->query($sql);
         } catch (Exception $e) {
             $success = false;
         }
 
         if ($success) {
             echo json_encode(
-                array('orgid' => $mysqli->insert_id));
+                array('orgid' => $conn->lastInsertId()));
         } else {
             echo json_encode(
                 array('success' => $success,
@@ -45,20 +45,21 @@ switch ($act) {
 		        from [transoil].[dbo].[org]
 		        order by orgabbr';
 
-        try {
-            $list = array();
-            $res = $conn->query($sql);
-            $res->setFetchMode(PDO::FETCH_ASSOC);
-            while($row = $res->fetch()) {
-                array_push($list, $row);
-            }
-        } catch (Exception $e) {
-            $success = false;
-            echo json_encode(
-                array('success' => $success,
-                    'message' => $sql));
-        }
-        echo json_encode($list);
+//        try {
+//            $list = array();
+//            $res = $conn->query($sql);
+//            $res->setFetchMode(PDO::FETCH_ASSOC);
+//            while($row = $res->fetch()) {
+//                array_push($list, $row);
+//            }
+//        } catch (Exception $e) {
+//            $success = false;
+//            echo json_encode(
+//                array('success' => $success,
+//                    'message' => $sql));
+//        }
+//        echo json_encode($list);
+        echo json_encode(_read($conn,$sql));
         break;
     case 'update':
         $orgname = $data['orgname'];
@@ -72,7 +73,7 @@ switch ($act) {
             where orgid = '$orgid'
         ";
         try {
-            $res = $mysqli->query($sql);
+            $res = $conn->query($sql);
         } catch (Exception $e) {
             $success = false;
         }
@@ -94,7 +95,7 @@ switch ($act) {
             where orgid = '$orgid'
         ";
         try {
-            $res = $mysqli->query($sql);
+            $res = $conn->query($sql);
         } catch (Exception $e) {
             $success = false;
         }
@@ -112,9 +113,5 @@ switch ($act) {
         break;
 };
 
-//if ($mysqli)
-//    $mysqli->close();
-
-//sqlsrv_close($conn);
 $conn = null;
 ?>

@@ -11,12 +11,11 @@ switch ($act) {
         $sql = "select *
 		        from [transoil].[dbo].[tool] u";
         try {
-            $res = $mysqli->query($sql);
             $list = array();
-            while ($row = $res->fetch_array(MYSQLI_ASSOC)) {
-                foreach ($row as $k => $v)
-                    $arr[$k] = $v;
-                array_push($list, $arr);
+            $res = $conn->query($sql);
+            $res->setFetchMode(PDO::FETCH_ASSOC);
+            while($row = $res->fetch()) {
+                array_push($list, $row);
             }
         } catch (Exception $e) {
             $success = false;
@@ -44,7 +43,7 @@ switch ($act) {
                 where toolid = 1";
         //echo $sql;
         try {
-            $res = $mysqli->query($sql);
+            $res = $conn->query($sql);
         } catch (Exception $e) {
             $success = false;
         }
@@ -52,7 +51,7 @@ switch ($act) {
         if ($success) {
             echo json_encode(
                 array('success' => $success));
-            _log($mysqli, $userid, 18, 'Изменение: ' . $values);
+            _log($conn, $userid, 18, 'Изменение: ' . $values);
         } else {
             echo json_encode(
                 array('success' => $success,

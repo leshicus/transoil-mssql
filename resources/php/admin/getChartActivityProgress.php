@@ -58,14 +58,13 @@ $sql = "SELECT
   AND a.orgid = '$org'
   HAVING data>0
 ";
-//echo $sql;
+
 try {
-    $res = $mysqli->query($sql);
-    $list=array();
-    while ($row = $res->fetch_array(MYSQLI_ASSOC)) {
-        foreach ($row as $k => $v)
-            $arr[$k]= $v;
-        array_push($list, $arr);
+    $list = array();
+    $res = $conn->query($sql);
+    $res->setFetchMode(PDO::FETCH_ASSOC);
+    while($row = $res->fetch()) {
+        array_push($list, $row);
     }
 } catch (Exception $e) {
     $success = false;
@@ -73,5 +72,5 @@ try {
            "message" => '.$sql.'}';
 }
 echo json_encode($list);
-
+$conn = null;
 ?>

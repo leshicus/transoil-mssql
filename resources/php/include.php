@@ -3,53 +3,71 @@ $success = true;
 $initPassword = 'init';
 $initRole = 3;  // * роль по умолчанию, предоставляема при регистрации нового пользователя
 
-function _log($mysqli,$userid, $logtypeid, $parameter)
+function _log($conn,$userid, $logtypeid, $parameter)
 {
     //$curdate = date('Y.m.d H:i');
     $sql = "
-         insert into [transoil].[dbo].[log]
+         insert [transoil].[dbo].[log]
          (logdate, userid, parameter, logtypeid)
          values
-         (NOW(), '$userid', '$parameter', '$logtypeid')
+         (GETDATE(), '$userid', '$parameter', '$logtypeid')
         ";
     try {
-        $res = $mysqli->query($sql);
+        $res = $conn->query($sql);
     } catch (Exception $e) {
         $success = false;
     }
 }
-//function _logtext($mysqli,$text)
+//function _logtext($conn,$text)
 //{
 //    //$curdate = date('Y.m.d H:i');
 //    $sql = "
-//         insert into `logtext`
+//         insert `logtext`
 //         (lgtext,lgdate)
 //         values
-//         ('$text',NOW())
+//         ('$text',GETDATE())
 //        ";
 //    try {
-//        $res = $mysqli->query($sql);
+//        $res = $conn->query($sql);
 //    } catch (Exception $e) {
 //        $success = false;
 //    }
 //}
 
-function _getSubsystemName($mysqli,$subsystemid)
+function _read($conn, $sql)
+{
+    try {
+        $list = array();
+        $res = $conn->query($sql);
+        $res->setFetchMode(PDO::FETCH_ASSOC);
+        while($row = $res->fetch()) {
+            array_push($list, $row);
+        }
+    } catch (Exception $e) {
+        $success = false;
+        echo json_encode(
+            array('success' => $success,
+                'message' => $sql));
+    }
+    return $list;
+}
+
+function _getSubsystemName($conn,$subsystemid)
 {
     $sql = '
          select s.subsystemname
          from [transoil].[dbo].[subsystem] s
          where s.subsystemid = '.$subsystemid;
     try {
-        $res = $mysqli->query($sql);
-        $row = $res->fetch_row();
+        $res = $conn->query($sql);
+        $row = $res->fetch();
     } catch (Exception $e) {
         $success = false;
     }
     return $row[0];
 }
 
-function _getUserName($mysqli,$userid)
+function _getUserName($conn,$userid)
 {
     $sql = '
          select u.familyname,
@@ -59,8 +77,8 @@ function _getUserName($mysqli,$userid)
          from [transoil].[dbo].[usr] u
          where u.userid = '.$userid;
     try {
-        $res = $mysqli->query($sql);
-        $row = $res->fetch_row();
+        $res = $conn->query($sql);
+        $row = $res->fetch();
     } catch (Exception $e) {
         $success = false;
     }
@@ -68,30 +86,30 @@ function _getUserName($mysqli,$userid)
     return $str;
 }
 
-function _getSpecname($mysqli,$specid)
+function _getSpecname($conn,$specid)
 {
     $sql = '
          select u.specname
          from [transoil].[dbo].[speciality] u
          where u.specid = '.$specid;
     try {
-        $res = $mysqli->query($sql);
-        $row = $res->fetch_row();
+        $res = $conn->query($sql);
+        $row = $res->fetch();
     } catch (Exception $e) {
         $success = false;
     }
     return $row[0];
 }
 
-function _getRolename($mysqli,$roleid)
+function _getRolename($conn,$roleid)
 {
     $sql = '
          select u.rolename
          from [transoil].[dbo].[role] u
          where u.roleid = '.$roleid;
     try {
-        $res = $mysqli->query($sql);
-        $row = $res->fetch_row();
+        $res = $conn->query($sql);
+        $row = $res->fetch();
     } catch (Exception $e) {
         $success = false;
     }

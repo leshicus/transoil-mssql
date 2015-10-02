@@ -12,18 +12,18 @@ switch ($act) {
     case 'create':
         $timelimit = $data['timelimit'];
         $sql = "
-            insert into [transoil].[dbo].[activity] (timelimit) values ($timelimit);
+            insert [transoil].[dbo].[activity] (timelimit) values ($timelimit);
         ";
         try {
-            $res = $mysqli->query($sql);
+            $res = $conn->query($sql);
         } catch (Exception $e) {
             $success = false;
         }
 
         if($success){
             echo json_encode(
-                array('actid' => $mysqli->insert_id));
-            _log($mysqli, $userid, 12, 'Создание: '.$mysqli->insert_id.', '.$actabbr);
+                array('actid' => $conn->lastInsertId()));
+            _log($conn, $userid, 12, 'Создание: '.$conn->lastInsertId().', '.$actabbr);
         }else{
             echo json_encode(
                 array('success' => $success,
@@ -40,21 +40,8 @@ switch ($act) {
                   timelimit
 		        from [transoil].[dbo].[activity]
 		        order by actnum';
-        try {
-            $res = $mysqli->query($sql);
-            $list=array();
-            while ($row = $res->fetch_array(MYSQLI_ASSOC)) {
-                foreach ($row as $k => $v)
-                    $arr[$k]= $v;
-                array_push($list, $arr);
-            }
-        } catch (Exception $e) {
-            $success = false;
-            echo json_encode(
-                array('success' => $success,
-                    'message' => $sql));
-        }
-        echo json_encode($list);
+
+        echo json_encode(_read($conn,$sql));
         break;
     case 'update':
         $actname = $data['actname'];
@@ -74,7 +61,7 @@ switch ($act) {
             where actid = '$actid'
         ";
         try {
-            $res = $mysqli->query($sql);
+            $res = $conn->query($sql);
         } catch (Exception $e) {
             $success = false;
         }
@@ -82,7 +69,7 @@ switch ($act) {
             echo json_encode(
                 array('success' => $success,
                     'message' => $sql));
-            _log($mysqli, $userid, 12, 'Исправление: '.$actid.', '.$actabbr);
+            _log($conn, $userid, 12, 'Исправление: '.$actid.', '.$actabbr);
         }else{
             echo json_encode(
                 array('success' => $success,
@@ -98,7 +85,7 @@ switch ($act) {
             where actid = '$actid'
         ";
         try {
-            $res = $mysqli->query($sql);
+            $res = $conn->query($sql);
         } catch (Exception $e) {
             $success = false;
         }
@@ -106,7 +93,7 @@ switch ($act) {
         if($success){
             echo json_encode(
                 array('success' => $success));
-            _log($mysqli, $userid, 12, 'Удаление: '.$actid);
+            _log($conn, $userid, 12, 'Удаление: '.$actid);
         }else{
             echo json_encode(
                 array('success' => $success,

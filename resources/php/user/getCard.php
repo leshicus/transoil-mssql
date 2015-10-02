@@ -8,20 +8,10 @@ require_once("../include.php");
 $userid = $_SESSION['userid'];
 $examid = $_REQUEST['examid'];
 $know = $_REQUEST['know'];
-//$str = '';
-
-$sql = "SET group_concat_max_len = 100000;";
-$res = $mysqli->query($sql);
-
-
 
 if (isset($know)) { // самоподготовка
     if ($know) { // указана ОЗ
-        $sql = "
-            select
-                group_concat(questionid) as str
-            from
-                (select
+        $sql = "select
                     q.questionid
                 from
                     [transoil].[dbo].[usr] u,
@@ -30,15 +20,9 @@ if (isset($know)) { // самоподготовка
                 where u.userid = '$userid'
                 and s.specid = u.specid
                 and q.knowid = '$know'
-                and q.groupid = s.groupid
-                ORDER BY RAND()) t";
+                and q.groupid = s.groupid";
     } else { // не указана ОЗ
-        // * строка с рандомными questionid, в количестве $questionMaxInCard штук
-        $sql = "
-            select
-                group_concat(questionid) as str
-            from
-                (select
+        $sql = "select
                     q.questionid
                 from
                     [transoil].[dbo].[usr] u,
@@ -46,14 +30,13 @@ if (isset($know)) { // самоподготовка
                     [transoil].[dbo].[question] q
                 where u.userid = '$userid'
                 and s.specid = u.specid
-                and q.groupid = s.groupid
-                ORDER BY RAND()) t";
+                and q.groupid = s.groupid";
     }
 
     try {
-        $res = $mysqli->query($sql);
-        $row = $res->fetch_row();
-        $str = $row[0];
+        $res = $conn->query($sql);
+        $column = $res->fetchColumn(0);
+        $str = implode(',',$column); // * преобразуем массив в строку
     } catch (Exception $e) {
         $success = false;
         $message = $sql;
@@ -61,35 +44,19 @@ if (isset($know)) { // самоподготовка
     //echo $str;
     //echo $sql;
     // * возможные вопросы
-    if($str != ''){
+    if($str){
         $sql = "select
             q.questionid,
             q.questiontext,
             a.answerid,
             a.answertext
-            /*a.correct,
-            a.normdoc*/
-            /*@n:=@n+1 as rownum*/
         from
             [transoil].[dbo].[question] q,
             [transoil].[dbo].[answer] a
         where a.questionid = q.questionid
         and q.questionid in (" . $str . ")";
-        //echo $sql;
-        try {
-            $res = $mysqli->query($sql);
-            $list = array();
-            while ($row = $res->fetch_array(MYSQLI_ASSOC)) {
-                foreach ($row as $k => $v) {
-                    $arr[$k] = $v;
-                }
-                array_push($list, $arr);
-            }
-        } catch (Exception $e) {
-            $success = false;
-            $message = $sql;
-        }
 
+        $list=_read($conn,$sql);
         // * проставим rownum
         $questionid = null;
         $cnt = 0;
@@ -112,16 +79,27 @@ if (isset($know)) { // самоподготовка
         from [transoil].[dbo].[tool] t
         where t.toolid = 1";
     try {
-        $res = $mysqli->query($sql);
-        $row = $res->fetch_row();
+        $res = $conn->query($sql);
+        $row = $res->fetch();
         $questionAmount = $row[0];
         if ($questionAmount > 0) {
             // * строка с рандомными questionid, в количестве $questionMaxInCard штук
-            $sql = "
-                select
-                    group_concat(questionid) as str
-                from
-                    (select
+//            $sql = "
+//                select
+//                    group_concat(questionid) as str
+//                from
+//                    (select
+//                        q.questionid
+//                    from
+//                        [transoil].[dbo].[usr] u,
+//                        [transoil].[dbo].[speciality] s,
+//                        [transoil].[dbo].[question] q
+//                    where u.userid = '$userid'
+//                    and s.specid = u.specid
+//                    and q.groupid = s.groupid
+//                    ORDER BY RAND()
+//                    LIMIT $questionAmount) t";
+            $sql = "select
                         q.questionid
                     from
                         [transoil].[dbo].[usr] u,
@@ -129,37 +107,30 @@ if (isset($know)) { // самоподготовка
                         [transoil].[dbo].[question] q
                     where u.userid = '$userid'
                     and s.specid = u.specid
-                    and q.groupid = s.groupid
-                    ORDER BY RAND()
-                    LIMIT $questionAmount) t";
+                    and q.groupid = s.groupid";
             try {
-                $res = $mysqli->query($sql);
-                $row = $res->fetch_row();
-                $str = $row[0];
+                $res = $conn->query($sql);
+                $column = $res->fetchColumn(0);
+
+                shuffle($column); // * перемешаем
+                $column = array_slice($array, 0, $questionAmount-1); // * обрежем до длины $questionAmount
+                $str = implode(',',$column); // * преобразуем массив в строку
+
                 if ($str) {
                     // * возможные вопросы
-                    //$mysqli->query('set @n:=0;');
                     $sql = "select
                             q.questionid,
                             q.questiontext,
                             a.answerid,
                             a.answertext
-                            /*a.correct,
-                            a.normdoc*/
-                            /*@n:=@n+1 as rownum*/
                         from
                             [transoil].[dbo].[question] q,
                             [transoil].[dbo].[answer] a
                         where a.questionid = q.questionid
                         and q.questionid in (" . $str . ")";
                     try {
-                        $res = $mysqli->query($sql);
-                        $list = array();
-                        while ($row = $res->fetch_array(MYSQLI_ASSOC)) {
-                            foreach ($row as $k => $v)
-                                $arr[$k] = $v;
-                            array_push($list, $arr);
-                        }
+                        $list=_read($conn,$sql);
+
                         if (count($list) > 0) {
                             // * сохраним в [transoil].[dbo].[card] сгенерированные вопросы по билету
                             $questionid = null;
@@ -171,13 +142,13 @@ if (isset($know)) { // самоподготовка
                                 } else {
                                     $questionid = $row['questionid'];
 
-                                    $sql = "insert into [transoil].[dbo].[card]
+                                    $sql = "insert [transoil].[dbo].[card]
                                         (userid, examid, questionid)
                                         values
                                         ('$userid', '$examid', '$questionid')";
                                     try {
                                         // * сохранение в билет
-                                        $res = $mysqli->query($sql);
+                                        $res = $conn->query($sql);
                                     } catch (Exception $e) {
                                         $success = false;
                                         $message = $sql;
@@ -210,7 +181,7 @@ if ($success) {
         $list = array_values($list);*/
         shuffle($list);
     }
-    _log($mysqli, $userid, 9, $examid);
+    _log($conn, $userid, 9, $examid);
     $rows = array();
     $rows['rows'] = $list;
     echo json_encode($rows);

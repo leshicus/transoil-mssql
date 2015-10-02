@@ -28,8 +28,8 @@ if (!$textLogin || !$textOldPassword || !$textNewPassword) {
          where u.login = '$textLogin'
         ";
         try {
-            $res_login = $mysqli->query($sql_login);
-            $row_login = $res_login->fetch_row();
+            $res_login = $conn->query($sql_login);
+            $row_login = $res_login->fetch();
         } catch (Exception $e) {
             $success = false;
             $message = $sql_login;
@@ -45,8 +45,8 @@ if (!$textLogin || !$textOldPassword || !$textNewPassword) {
              and u.password = '$oldPassSha1'
             ";
             try {
-                $res_pas = $mysqli->query($sql_pas);
-                $row_pas = $res_pas->fetch_row();
+                $res_pas = $conn->query($sql_pas);
+                $row_pas = $res_pas->fetch();
             } catch (Exception $e) {
                 $success = false;
                 $message = $sql_pas;
@@ -60,7 +60,7 @@ if (!$textLogin || !$textOldPassword || !$textNewPassword) {
                  where u.login = '$textLogin'
                 ";
                 try {
-                    $res_change = $mysqli->query($sql_change);
+                    $res_change = $conn->query($sql_change);
                 } catch (Exception $e) {
                     $success = false;
                     $message = $sql_change;
@@ -81,7 +81,7 @@ if ($success) {
     echo json_encode(
         array('success' => $success,
             'message' => $message));
-    _log($mysqli, $userid, 8, 'Смена пользователем');
+    _log($conn, $userid, 8, 'Смена пользователем');
 } else {
     echo json_encode(
         array('success' => $success,

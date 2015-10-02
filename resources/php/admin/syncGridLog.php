@@ -15,19 +15,24 @@ switch ($act) {
         if($comboLogtype)
             $where.= " and g.logtypeid = '" . $comboLogtype . "' ";
         if($dateFrom)
-            $where.= " and STR_TO_DATE(g.logdate, '%Y-%m-%d %H:%i') >= STR_TO_DATE('" . $dateFrom . "', '%Y-%m-%dT%H:%i')";
+            $where.= " and DATEDIFF(mi, '" . $dateFrom . "', g.logdate) >= 0 ";
+            //$where.= " and STR_TO_DATE(g.logdate, '%Y-%m-%d %H:%i') >= STR_TO_DATE('" . $dateFrom . "', '%Y-%m-%dT%H:%i')";
         if($dateTo)
-            $where.= " and STR_TO_DATE(g.logdate, '%Y-%m-%d %H:%i') <= STR_TO_DATE('" . $dateTo . "', '%Y-%m-%dT%H:%i') ";
+            $where.= " and DATEDIFF(mi, g.logdate, '" . $dateTo . "') >= 0 ";
+            //$where.= " and STR_TO_DATE(g.logdate, '%Y-%m-%d %H:%i') <= STR_TO_DATE('" . $dateTo . "', '%Y-%m-%dT%H:%i') ";
         if(!$dateFrom && !$dateTo)
-            $where.= " and STR_TO_DATE(g.logdate, '%Y-%m-%d') = STR_TO_DATE(CURDATE(), '%Y-%m-%d') ";
+            $where.= " and DATEDIFF(DAY, g.logdate, getdate()) = 0 ";
+            //$where.= " and STR_TO_DATE(g.logdate, '%Y-%m-%d') = STR_TO_DATE(getdate(), '%Y-%m-%d') ";
 
         $sql = "select
                   g.logid,
-                  DATE_FORMAT(g.logdate, '%d.%m.%Y %H:%i') as logdate,
+                  --DATE_FORMAT(g.logdate, '%d.%m.%Y %H:%i') as logdate,
+                  convert(varchar, g.logdate, 104) + ' ' +convert(varchar, g.logdate, 108) as logdate,
                   g.userid,
                   g.parameter,
                   g.logtypeid,
-                  CONCAT_WS(' ',u.familyname,u.firstname,u.lastname) as fio,
+                  u.familyname+' '+u.firstname+' '+u.lastname as fio,
+                  --CONCAT_WS(' ',u.familyname,u.firstname,u.lastname) as fio,
                   t.logtypename
 		        from [transoil].[dbo].[log] g,
 		            [transoil].[dbo].[usr] u,
@@ -36,12 +41,11 @@ switch ($act) {
 		        and t.logtypeid = g.logtypeid ".$where.
 		        " order by logid desc";
         try {
-            $res = $mysqli->query($sql);
             $list = array();
-            while ($row = $res->fetch_array(MYSQLI_ASSOC)) {
-                foreach ($row as $k => $v)
-                    $arr[$k] = $v;
-                array_push($list, $arr);
+            $res = $conn->query($sql);
+            $res->setFetchMode(PDO::FETCH_ASSOC);
+            while($row = $res->fetch()) {
+                array_push($list, $row);
             }
         } catch (Exception $e) {
             $success = false;

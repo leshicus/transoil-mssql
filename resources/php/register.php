@@ -31,8 +31,8 @@ if (!$textLogin || !$textFamily || !$textName || !$comboSpeciality || !$textPass
          where u.login = '$textLogin'
         ";
         try {
-            $res_login = $mysqli->query($sql_login);
-            $row_login = $res_login->fetch_row();
+            $res_login = $conn->query($sql_login);
+            $row_login = $res_login->fetch();
         } catch (Exception $e) {
             $success = false;
             $message = $sql_login;
@@ -47,8 +47,8 @@ if (!$textLogin || !$textFamily || !$textName || !$comboSpeciality || !$textPass
              and u.specid = '$comboSpeciality'
             ";
             try {
-                $res_fio = $mysqli->query($sql_fio);
-                $row_fio = $res_fio->fetch_row();
+                $res_fio = $conn->query($sql_fio);
+                $row_fio = $res_fio->fetch();
             } catch (Exception $e) {
                 $success = false;
                 $message = $sql_fio;
@@ -56,7 +56,7 @@ if (!$textLogin || !$textFamily || !$textName || !$comboSpeciality || !$textPass
             if (!$row_fio[0]) {
                 $passSha1 = sha1($textPassword);
                 $sql = "
-                    insert into [transoil].[dbo].[usr](
+                    insert [transoil].[dbo].[usr](
                       familyname,
                       firstname,
                       lastname,
@@ -72,12 +72,12 @@ if (!$textLogin || !$textFamily || !$textName || !$comboSpeciality || !$textPass
                       '$comboSpeciality',
                       '$passSha1',
                       '$textLogin',
-                      NOW(),
+                      GETDATE(),
                       '$initRole'
                     );
                 ";
                 try {
-                    $res = $mysqli->query($sql);
+                    $res = $conn->query($sql);
                 } catch (Exception $e) {
                     $success = false;
                     $message = $sql;
@@ -96,8 +96,8 @@ if (!$textLogin || !$textFamily || !$textName || !$comboSpeciality || !$textPass
 if ($success) {
     echo json_encode(
         array('success' => $success,
-            'userid' => $mysqli->insert_id));
-    _log($mysqli, $mysqli->insert_id, 3, 'Создание: '.$textFamily.' '.$textName.' '.$textLastname.', '.$comboSpeciality.', '.$textLogin);
+            'userid' => $conn->lastInsertId()));
+    _log($conn, $conn->lastInsertId(), 3, 'Создание: '.$textFamily.' '.$textName.' '.$textLastname.', '.$comboSpeciality.', '.$textLogin);
 } else {
     echo json_encode(
         array('success' => $success,

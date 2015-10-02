@@ -17,7 +17,7 @@ switch ($act) {
             $knowid = $row['knowid'];
 
             $sql = "
-                insert into question(
+                insert [transoil].[dbo].[question](
                   questiontext,
                   groupid,
                   knowid
@@ -29,7 +29,7 @@ switch ($act) {
             ";
             //echo $sql;
             try {
-                $res = $mysqli->query($sql);
+                $res = $conn->query($sql);
             } catch (Exception $e) {
                 $success = false;
             }
@@ -37,8 +37,8 @@ switch ($act) {
 
         if($success){
             echo json_encode(
-                array('questionid' => $mysqli->insert_id));
-            _log($mysqli, $userid, 14, 'Создание. '.$mysqli->insert_id.', '.$questiontext);
+                array('questionid' => $conn->lastInsertId()));
+            _log($conn, $userid, 14, 'Создание. '.$conn->lastInsertId().', '.$questiontext);
         }else{
             echo json_encode(
                 array('success' => $success,
@@ -76,21 +76,8 @@ switch ($act) {
                   LEFT JOIN [transoil].[dbo].[activity] a ON
                   a.actid = g.actid'.
                 $where;
-        try {
-            $res = $mysqli->query($sql);
-            $list=array();
-            while ($row = $res->fetch_array(MYSQLI_ASSOC)) {
-                foreach ($row as $k => $v)
-                    $arr[$k]= $v;
-                array_push($list, $arr);
-            }
-        } catch (Exception $e) {
-            $success = false;
-            echo json_encode(
-                array('success' => $success,
-                    'message' => $sql));
-        }
-        echo json_encode($list);
+
+        echo json_encode(_read($conn,$sql));
         break;
     case 'update':
         foreach ($data as $row) {
@@ -107,9 +94,9 @@ switch ($act) {
                 where questionid = '$questionid'
             ";
             try {
-                $res = $mysqli->query($sql);
+                $res = $conn->query($sql);
 
-                _log($mysqli, $userid, 14, 'Исправление или перемещение. '.$questionid.', '.$questiontext);
+                _log($conn, $userid, 14, 'Исправление или перемещение. '.$questionid.', '.$questiontext);
             } catch (Exception $e) {
                 $success = false;
             }
@@ -133,9 +120,9 @@ switch ($act) {
                 where questionid = '$questionid'
             ";
             try {
-                $res = $mysqli->query($sql);
+                $res = $conn->query($sql);
 
-                _log($mysqli, $userid, 14, 'Удаление. '.$questionid);
+                _log($conn, $userid, 14, 'Удаление. '.$questionid);
             } catch (Exception $e) {
                 $success = false;
                 $message = $sql;

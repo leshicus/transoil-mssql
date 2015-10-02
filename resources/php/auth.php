@@ -23,12 +23,13 @@ if (strtoupper($textPassword) == strtoupper($initPassword)) {
      select u.userid
      from [transoil].[dbo].[usr] u
      where u.login = '$textLogin'
-     and (u.enddate is null or u.enddate = '0000-00-00 00:00:00')
+     and u.enddate is null
+     --and u.enddate is null or u.enddate = '0000-00-00 00:00:00')
     ";
 
     try {
-        $res_reg = $mysqli->query($sql_reg);
-        $row_reg = $res_reg->fetch_row();
+        $res_reg = $conn->query($sql_reg);
+        $row_reg = $res_reg->fetch();
     } catch (Exception $e) {
         $success = false;
         $message = $sql_reg;
@@ -45,8 +46,8 @@ if (strtoupper($textPassword) == strtoupper($initPassword)) {
          and   ra.subsystemid = '$comboSystem'
         ";
         try {
-            $res_sys = $mysqli->query($sql_sys);
-            $row_sys = $res_sys->fetch_row();
+            $res_sys = $conn->query($sql_sys);
+            $row_sys = $res_sys->fetch();
             // * проверка пароля
             $passSha1 = sha1($textPassword);
             //echo $passSha1;
@@ -57,8 +58,8 @@ if (strtoupper($textPassword) == strtoupper($initPassword)) {
              and   u.password = '$passSha1'
             ";
             try {
-                $res_pas = $mysqli->query($sql_pas);
-                $row_pas = $res_pas->fetch_row();
+                $res_pas = $conn->query($sql_pas);
+                $row_pas = $res_pas->fetch();
             } catch (Exception $e) {
                 $success = false;
                 $message = $sql_pas;
@@ -70,13 +71,14 @@ if (strtoupper($textPassword) == strtoupper($initPassword)) {
             }else{
                 // * узнаем ФИО пользователя, чтобы вернуть в программу
                 $sql_fio = "
-                     select CONCAT(u.familyname,' ',u.firstname,' ',u.lastname) as fio
+                     select u.familyname+' '+u.firstname+' '+u.lastname as fio
                      from [transoil].[dbo].[usr]     u
                      where u.userid = '$userid'
                     ";
                 try {
-                    $res_fio = $mysqli->query($sql_fio);
-                    $row_fio = $res_fio->fetch_row();
+                    $res_fio = $conn->query($sql_fio);
+                    $res_fio->setFetchMode(PDO::FETCH_ASSOC);
+                    $row_fio = $res_fio->fetch();
                 } catch (Exception $e) {
                     $success = false;
                     $message = $sql_fio;
@@ -104,7 +106,7 @@ if ($success) {
             'message' => $message,
             'userid' => $userid,
             'fio' => $fio));
-    _log($mysqli, $userid, 1, 'Вход: '._getSubsystemName($mysqli,$comboSystem));
+    _log($conn, $userid, 1, 'Вход: '._getSubsystemName($conn,$comboSystem));
     $_SESSION['userid'] = $userid;
 } else {
     echo json_encode(

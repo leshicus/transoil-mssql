@@ -39,7 +39,7 @@ if ($_FILES) {
 
             if ($questiontext != '') {
                 $sql = "
-                    insert into question(
+                    insert [transoil].[dbo].[question](
                       questiontext,
                       knowid,
                       groupid
@@ -52,12 +52,12 @@ if ($_FILES) {
 
                 try {
                     // * prepare для того, чтобы была возможность вставлять null
-                    $stmt = $mysqli->prepare($sql);
+                    $stmt = $conn->prepare($sql);
                     $stmt->bind_param('sss', $questiontext, $knowid, $groupid);
                     $stmt->execute();
                     $questionid = $stmt->insert_id;
                     $stmt->close();
-                    //_log($mysqli, $userid, 14, 'Импорт. '.$questionid.', '.$questiontext);
+                    //_log($conn, $userid, 14, 'Импорт. '.$questionid.', '.$questiontext);
                     $numQuestion++;
                 } catch (Exception $e) {
                     $success = false;
@@ -77,8 +77,8 @@ if ($_FILES) {
                 if ($answertext == '') $answertext = '0';
                 if ($success && $questionid) {
                     $sql = "
-                        insert into [transoil].[dbo].[answer]
-(
+                        insert [transoil].[dbo].[answer]
+                        (
                           questionid,
                           answertext,
                           correct,
@@ -91,9 +91,9 @@ if ($_FILES) {
                         );
                     ";
                     try {
-                        $res = $mysqli->query($sql);
-                        $answerid = $mysqli->insert_id;
-                        //_log($mysqli, $userid, 13, 'Импорт. ' . $mysqli->insert_id . ', ' . $answertext);
+                        $res = $conn->query($sql);
+                        $answerid = $conn->lastInsertId();
+                        //_log($conn, $userid, 13, 'Импорт. ' . $conn->lastInsertId() . ', ' . $answertext);
                     } catch (Exception $e) {
                         $success = false;
                         $message = 'Ошибка добавления ответа';
@@ -119,8 +119,8 @@ if ($_FILES) {
                     ";
 
             try {
-                $res = $mysqli->query($sql);
-                //_log($mysqli, $userid, 13, 'Импорт. ' . $mysqli->insert_id . ', ' . $answertext);
+                $res = $conn->query($sql);
+                //_log($conn, $userid, 13, 'Импорт. ' . $conn->lastInsertId() . ', ' . $answertext);
             } catch (Exception $e) {
                 $success = false;
                 $message = 'Ошибка обновления ответа';

@@ -14,8 +14,8 @@ $query = "select count(*)
           where examid = '$examid'
           and userid = '$userid'";
 try {
-    $res = $mysqli->query($query);
-    $row = $res->fetch_row();
+    $res = $conn->query($query);
+    $row = $res->fetch();
     $cnt = $row[0];
 } catch (Exception $e) {
     $success = false;

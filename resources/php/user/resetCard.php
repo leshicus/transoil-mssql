@@ -12,14 +12,14 @@ $sql = "delete from [transoil].[dbo].[card]
         where userid = '$userid'
         and examid = '$examid'";
 try {
-    $res = $mysqli->query($sql);
+    $res = $conn->query($sql);
 } catch (Exception $e) {
     $success = false;
     $message = $sql;
 }
 
 if ($success) {
-    _log($mysqli, $userid, 11, 'Отмена билета после ошибки: '.$examid);
+    _log($conn, $userid, 11, 'Отмена билета после ошибки: '.$examid);
     echo json_encode(array('success' => $success));
 } else {
     echo json_encode(

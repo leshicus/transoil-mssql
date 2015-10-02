@@ -14,13 +14,17 @@ switch ($act) {
         $orgid = $data['orgid'];
         $curdate = date('d.m.Y H:i');
         // * определим ФИО наблюдателя
+//        $sql_fio = "select
+//          CONCAT_WS(' ',u.familyname,u.firstname,u.lastname) as fio
+//        from [transoil].[dbo].[usr] u
+//		where u.userid = '$userid'";
         $sql_fio = "select
-          CONCAT_WS(' ',u.familyname,u.firstname,u.lastname) as fio
+          u.familyname+' '+u.firstname+' '+u.lastname as fio
         from [transoil].[dbo].[usr] u
 		where u.userid = '$userid'";
         try {
-            $res_fio = $mysqli->query($sql_fio);
-            $row = $res_fio->fetch_row();
+            $res_fio = $conn->query($sql_fio);
+            $row = $res_fio->fetch();
             $fio = $row[0];
         } catch (Exception $e) {
             $success = false;
@@ -30,31 +34,30 @@ switch ($act) {
         }
 
         $sql = "
-            insert into [transoil].[dbo].[exam]
-(
+            insert [transoil].[dbo].[exam](
               examdate,
               userid,
               orgid
             )values(
-              NOW(),
+              GETDATE(),
               '$userid',
               '$orgid'
             );
         ";
         try {
-            $res = $mysqli->query($sql);
+            $res = $conn->query($sql);
         } catch (Exception $e) {
             $success = false;
         }
 
         if ($success) {
             echo json_encode(
-                    array('examid' => $mysqli->insert_id,
+                    array('examid' => $conn->lastInsertId(),
                         'userid' => $userid,
                         'examdate' => $curdate,
                         'orgid' => $orgid,
                         'fio' => $fio));
-            _log($mysqli, $userid, 17, 'Создание: ' . $mysqli->insert_id . ', ' . $curdate);
+            _log($conn, $userid, 17, 'Создание: ' . $conn->lastInsertId() . ', ' . $curdate);
         } else {
             echo json_encode(
                 array('success' => $success,
@@ -68,11 +71,14 @@ switch ($act) {
 
         $where = "";
         if ($dateFrom)
-            $where .= " and STR_TO_DATE(e.examdate, '%Y-%m-%d %H:%i') >= STR_TO_DATE('" . $dateFrom . "', '%Y-%m-%dT%H:%i') ";
+            $where .= " and DATEDIFF(mi,e.examdate, '" . $dateFrom . "') >= 0 ";
+            //$where .= " and STR_TO_DATE(e.examdate, '%Y-%m-%d %H:%i') >= STR_TO_DATE('" . $dateFrom . "', '%Y-%m-%dT%H:%i') ";
         if ($dateTo)
-            $where .= " and STR_TO_DATE(e.examdate, '%Y-%m-%d %H:%i') <= STR_TO_DATE('" . $dateTo . "', '%Y-%m-%dT%H:%i') ";
+            $where .= " and DATEDIFF(mi,'" . $dateTo . "',e.examdate) >= 0 ";
+            //$where .= " and STR_TO_DATE(e.examdate, '%Y-%m-%d %H:%i') <= STR_TO_DATE('" . $dateTo . "', '%Y-%m-%dT%H:%i') ";
         if (!$dateFrom && !$dateTo)
-            $where .= " and STR_TO_DATE(e.examdate, '%Y-%m-%d') = STR_TO_DATE(CURDATE(), '%Y-%m-%d') ";
+            $where .= " and DATEDIFF(DAY,e.examdate, getdate()) = 0 ";
+            //$where .= " and STR_TO_DATE(e.examdate, '%Y-%m-%d') = STR_TO_DATE(getdate(), '%Y-%m-%d') ";
         if ($testMode)
             $where .= " and e.orgid = (
                 select a.orgid
@@ -88,9 +94,11 @@ switch ($act) {
 
         $sql = "select
                   examid,
-                  DATE_FORMAT(examdate, '%d.%m.%Y %H:%i') as examdate,
+                  --DATE_FORMAT(examdate, '%d.%m.%Y %H:%i') as examdate,
+                  convert(varchar, e.examdate, 104) + ' '+ convert(varchar, e.examdate, 108) as examdate,
                   e.userid,
-                  CONCAT_WS(' ',u.familyname,u.firstname,u.lastname) as fio,
+                  u.familyname+' '+u.firstname+' '+u.lastname as fio,
+                  --CONCAT_WS(' ',u.familyname,u.firstname,u.lastname) as fio,
                   u.login,
                   e.orgid,
                   o.orgabbr
@@ -100,14 +108,12 @@ switch ($act) {
 		        where o.orgid = e.orgid
 		        and u.userid = e.userid " . $where .
             " order by examdate desc";
-        //echo $sql;
         try {
-            $res = $mysqli->query($sql);
             $list = array();
-            while ($row = $res->fetch_array(MYSQLI_ASSOC)) {
-                foreach ($row as $k => $v)
-                    $arr[$k] = $v;
-                array_push($list, $arr);
+            $res = $conn->query($sql);
+            $res->setFetchMode(PDO::FETCH_ASSOC);
+            while($row = $res->fetch()) {
+                array_push($list, $row);
             }
         } catch (Exception $e) {
             $success = false;
@@ -127,7 +133,7 @@ switch ($act) {
             where examid = '$examid'
         ";
         try {
-            $res = $mysqli->query($sql);
+            $res = $conn->query($sql);
         } catch (Exception $e) {
             $success = false;
         }
@@ -149,14 +155,14 @@ switch ($act) {
             where examid = '$examid'
         ";
         try {
-            $res = $mysqli->query($sql);
+            $res = $conn->query($sql);
         } catch (Exception $e) {
             $success = false;
             $message = $sql;
         }
 
         if ($success) {
-            _log($mysqli, $userid, 17, 'Удаление: ' . $examid);
+            _log($conn, $userid, 17, 'Удаление: ' . $examid);
             echo json_encode(array('success' => $success));
         } else {
             echo json_encode(

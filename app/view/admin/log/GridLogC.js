@@ -33,7 +33,7 @@ Ext.define('App.view.admin.log.GridLogC', {
                         comboLogtype = grid.down('#comboLogtype');
                     grid.getViewModel().getStore('log').load({
                         params: {
-                            dateFindFrom: field.getValue(),
+                            dateFindFrom: Ext.Date.format(field.getValue(), 'd.m.Y H:i'),
                             dateFindTo: dateFindTo.getValue(),
                             comboLogtype:comboLogtype.getValue()
                         }

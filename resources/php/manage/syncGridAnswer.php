@@ -21,8 +21,8 @@ switch ($act) {
             $correct = 0;
 
         $sql = "
-                insert into [transoil].[dbo].[answer]
-(
+                insert [transoil].[dbo].[answer]
+                (
                   answertext,
                   questionid,
                   correct,
@@ -35,15 +35,15 @@ switch ($act) {
                 );
             ";
         try {
-            $res = $mysqli->query($sql);
+            $res = $conn->query($sql);
         } catch (Exception $e) {
             $success = false;
         }
 
         if ($success) {
             echo json_encode(
-                    array('answerid' => $mysqli->insert_id));
-            _log($mysqli, $userid, 13, 'Создание. ' . $mysqli->insert_id . ', ' . $answertext);
+                    array('answerid' => $conn->lastInsertId()));
+            _log($conn, $userid, 13, 'Создание. ' . $conn->lastInsertId() . ', ' . $answertext);
         } else {
             echo json_encode(
                 array('success' => $success,
@@ -60,21 +60,8 @@ switch ($act) {
                   normdoc
 		        from [transoil].[dbo].[answer]
 		        where questionid='.$questionid;
-        try {
-            $res = $mysqli->query($sql);
-            $list = array();
-            while ($row = $res->fetch_array(MYSQLI_ASSOC)) {
-                foreach ($row as $k => $v)
-                    $arr[$k] = $v;
-                array_push($list, $arr);
-            }
-        } catch (Exception $e) {
-            $success = false;
-            echo json_encode(
-                array('success' => $success,
-                    'message' => $sql));
-        }
-        echo json_encode($list);
+
+        echo json_encode(_read($conn,$sql));
         break;
     case 'update':
         $answerid = $data['answerid'];
@@ -99,7 +86,7 @@ switch ($act) {
                 where answerid = '$answerid'
             ";
         try {
-            $res = $mysqli->query($sql);
+            $res = $conn->query($sql);
         } catch (Exception $e) {
             $success = false;
         }
@@ -107,7 +94,7 @@ switch ($act) {
         if ($success) {
             echo json_encode(
                 array('success' => $success));
-            _log($mysqli, $userid, 13, 'Изменение. ' . $answertext);
+            _log($conn, $userid, 13, 'Изменение. ' . $answertext);
         } else {
             echo json_encode(
                 array('success' => $success,
@@ -122,7 +109,7 @@ switch ($act) {
                 where answerid = '$answerid'
             ";
         try {
-            $res = $mysqli->query($sql);
+            $res = $conn->query($sql);
         } catch (Exception $e) {
             $success = false;
         }
@@ -130,7 +117,7 @@ switch ($act) {
         if ($success) {
             echo json_encode(
                 array('success' => $success));
-            _log($mysqli, $userid, 13, 'Удаление. ' . $answerid);
+            _log($conn, $userid, 13, 'Удаление. ' . $answerid);
         } else {
             echo json_encode(
                 array('success' => $success,

@@ -1,5 +1,5 @@
 <?
-	//$mysqli = new PDO("sqlsrv:Server=ALEX-ПК\\SQLEXPRESS;Database=transoil","root","");
+	//$conn = new PDO("sqlsrv:Server=ALEX-ПК\\SQLEXPRESS;Database=transoil","root","");
 
 $serverName = "ALEX-ПК\\SQLEXPRESS";
 //$connectionInfo = array('Database'=>'transoil','CharacterSet'=>'UTF-8');

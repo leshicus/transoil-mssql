@@ -5,20 +5,19 @@ $sql = "select
           roleid as id,
           rolename as  name
         from role";
-
 try {
-    $res = $mysqli->query($sql);
-    $list=array();
-    while ($row = $res->fetch_array(MYSQLI_ASSOC)) {
-        foreach ($row as $k => $v)
-            $arr[$k]= $v;
-        array_push($list, $arr);
+    $list = array();
+    $res = $conn->query($sql);
+    $res->setFetchMode(PDO::FETCH_ASSOC);
+    while($row = $res->fetch()) {
+        array_push($list, $row);
     }
 } catch (Exception $e) {
     $success = false;
     echo '{"success" => '.$success.',
            "message" => '.$sql.'}';
 }
-echo json_encode($list);
 
+echo json_encode($list);
+$conn = null;
 ?>

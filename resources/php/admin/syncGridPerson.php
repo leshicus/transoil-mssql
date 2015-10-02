@@ -14,7 +14,7 @@ switch ($act) {
         $groupnum = $data['groupnum'];
 
         $sql = "
-            insert into [transoil].[dbo].[grp](
+            insert [transoil].[dbo].[grp](
               actid,
               groupnum
             )values(
@@ -23,14 +23,14 @@ switch ($act) {
             );
         ";
         try {
-            $res = $mysqli->query($sql);
+            $res = $conn->query($sql);
         } catch (Exception $e) {
             $success = false;
         }
 
         if($success){
             echo json_encode(
-                array('groupid' => $mysqli->insert_id));
+                array('groupid' => $conn->lastInsertId()));
         }else{
             echo json_encode(
                 array('success' => $success,
@@ -48,7 +48,8 @@ switch ($act) {
                   c.userid,
                   balls,
                   result,
-                  CONCAT_WS(' ',u.familyname,u.firstname,u.lastname) as fio,
+                  u.familyname+' '+u.firstname+' '+u.lastname as fio,
+                  --CONCAT_WS(' ',u.familyname,u.firstname,u.lastname) as fio,
                   u.login,
                   reg,
                   a.timelimit
@@ -65,12 +66,11 @@ switch ($act) {
 		        " order by fio";
 
         try {
-            $res = $mysqli->query($sql);
-            $list=array();
-            while ($row = $res->fetch_array(MYSQLI_ASSOC)) {
-                foreach ($row as $k => $v)
-                    $arr[$k]= $v;
-                array_push($list, $arr);
+            $list = array();
+            $res = $conn->query($sql);
+            $res->setFetchMode(PDO::FETCH_ASSOC);
+            while($row = $res->fetch()) {
+                array_push($list, $row);
             }
         } catch (Exception $e) {
             $success = false;
@@ -100,8 +100,10 @@ switch ($act) {
                       or result = -1)
             ";
             try {
-                $res = $mysqli->query($sql);
-                $row = $res->fetch_row();
+                $res = $conn->query($sql);
+                $res->setFetchMode(PDO::FETCH_ASSOC);
+                $row = $res->fetch();
+
                 $result = $row[0];
             } catch (Exception $e) {
                 $success = false;
@@ -113,9 +115,9 @@ switch ($act) {
                     set reg = '$reg'
                     where userid = '$userid'
                     and examid = '$examid'
-            ";
+                ";
                 try {
-                    $res = $mysqli->query($sql);
+                    $res = $conn->query($sql);
                 } catch (Exception $e) {
                     $success = false;
                 }
@@ -127,7 +129,7 @@ switch ($act) {
         if($success){
             echo json_encode(
                 array('success' => $success));
-            _log($mysqli, $userid, 17, 'Регистрация: '.$examid);
+            _log($conn, $userid, 17, 'Регистрация: '.$examid);
         }else{
             echo json_encode(
                 array('success' => $success,
@@ -145,7 +147,7 @@ switch ($act) {
                 and examid = '$examid'
             ";
             try {
-                $res = $mysqli->query($sql);
+                $res = $conn->query($sql);
             } catch (Exception $e) {
                 $success = false;
             }
@@ -156,7 +158,7 @@ switch ($act) {
                 and examid = '$examid'
             ";
             try {
-                $res = $mysqli->query($sql);
+                $res = $conn->query($sql);
             } catch (Exception $e) {
                 $success = false;
             }
@@ -164,7 +166,7 @@ switch ($act) {
         if($success){
             echo json_encode(
                 array('success' => $success));
-            _log($mysqli, $userid, 17, 'Удаление регистрации: '.$examid);
+            _log($conn, $userid, 17, 'Удаление регистрации: '.$examid);
         }else{
             echo json_encode(
                 array('success' => $success,

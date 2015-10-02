@@ -12,21 +12,21 @@ switch ($act) {
         $examid = $data['examid'];
 
         $sql = "
-            insert into [transoil].[dbo].[signgroup] (
+            insert [transoil].[dbo].[signgroup] (
               examid
             )values(
               '$examid'
             );
         ";
         try {
-            $res = $mysqli->query($sql);
+            $res = $conn->query($sql);
         } catch (Exception $e) {
             $success = false;
         }
 
         if($success){
             echo json_encode(
-                array('signgroupid' => $mysqli->insert_id));
+                array('signgroupid' => $conn->lastInsertId()));
         }else{
             echo json_encode(
                 array('success' => $success,
@@ -46,26 +46,27 @@ switch ($act) {
                   familyname,
                   firstname,
                   lastname,
-                  CONCAT_WS(' ',familyname,firstname,lastname) as fio
+                  u.familyname+' '+u.firstname+' '+u.lastname as fio
+                  --CONCAT_WS(' ',familyname,firstname,lastname) as fio
 		        from [transoil].[dbo].[signgroup] "
 		        .$where.
 		        " order by familyname, firstname";
         //echo $sql;
-        try {
-            $res = $mysqli->query($sql);
-            $list=array();
-            while ($row = $res->fetch_array(MYSQLI_ASSOC)) {
-                foreach ($row as $k => $v)
-                    $arr[$k]= $v;
-                array_push($list, $arr);
-            }
-        } catch (Exception $e) {
-            $success = false;
-            echo json_encode(
-                array('success' => $success,
-                    'message' => $sql));
-        }
-        echo json_encode($list);
+//        try {
+//            $res = $conn->query($sql);
+//            $list=array();
+//            while ($row = $res->fetch_array(MYSQLI_ASSOC)) {
+//                foreach ($row as $k => $v)
+//                    $arr[$k]= $v;
+//                array_push($list, $arr);
+//            }
+//        } catch (Exception $e) {
+//            $success = false;
+//            echo json_encode(
+//                array('success' => $success,
+//                    'message' => $sql));
+//        }
+        echo json_encode(_read($conn,$sql));
         break;
     case 'update':
         $signgroupid = $data['signgroupid'];
@@ -85,7 +86,7 @@ switch ($act) {
             where signgroupid = '$signgroupid'
         ";
         try {
-            $res = $mysqli->query($sql);
+            $res = $conn->query($sql);
         } catch (Exception $e) {
             $success = false;
         }
@@ -108,7 +109,7 @@ switch ($act) {
             where signgroupid = '$signgroupid'
         ";
         try {
-            $res = $mysqli->query($sql);
+            $res = $conn->query($sql);
         } catch (Exception $e) {
             $success = false;
             echo json_encode(

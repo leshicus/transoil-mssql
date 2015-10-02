@@ -16,8 +16,8 @@ if (!$dateFindTo)
 
 // * формирование массивов и переменных
 $queryHeader = "select
-            DATE_FORMAT(e.examdate, '%d.%m.%Y %H:%i') as examdate,
-            CONCAT(u.familyname,' ',u.firstname,' ',u.lastname) as fio,
+            convert(varchar, e.examdate, 104) +' '+ convert(varchar, e.examdate, 108) as examdate,
+            u.familyname+' '+u.firstname+' '+u.lastname as fio,
             s.specname,
             (CASE c.result when 1 then 'сдан'
               WHEN 0 THEN 'не сдан'
@@ -44,13 +44,19 @@ $queryHeader = "select
           ";
 
 try {
-    $resHeader = $mysqli->query($queryHeader);
+//    $resHeader = $conn->query($queryHeader);
+//    $list = array();
+//    while ($row = $resHeader->fetch_array(MYSQLI_ASSOC)) {
+//        foreach ($row as $k => $v)
+//            $arr[$k] = $v;
+//        array_push($list, $arr);
+//    }
 
     $list = array();
-    while ($row = $resHeader->fetch_array(MYSQLI_ASSOC)) {
-        foreach ($row as $k => $v)
-            $arr[$k] = $v;
-        array_push($list, $arr);
+    $resHeader = $conn->query($queryHeader);
+    $resHeader->setFetchMode(PDO::FETCH_ASSOC);
+    while($row = $resHeader->fetch()) {
+        array_push($list, $row);
     }
 } catch (Exception $e) {
     $success = false;

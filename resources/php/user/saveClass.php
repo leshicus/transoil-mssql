@@ -17,7 +17,7 @@ $sql = "
     where userid = '$userid'
     and examid = '$examid'";
 try {
-    $res = $mysqli->query($sql);
+    $res = $conn->query($sql);
 } catch (Exception $e) {
     $success = false;
     $message = $sql;

@@ -55,11 +55,11 @@ $queryHeader = "select
           and a.orgid = o.orgid
           ";
 try {
-    $resHeader = $mysqli->query($queryHeader);
-    $rowHeader = $resHeader->fetch_row();
+    $resHeader = $conn->query($queryHeader);
+    $rowHeader = $resHeader->fetch();
 
     $fioFull = $rowHeader[1].' '.$rowHeader[2].' '.$rowHeader[3];
-    $fioAbbr = $rowHeader[1].' '.substr($rowHeader[2],0,2).'.'.substr($rowHeader[3],0,2).'.';
+    $fioAbbr = $rowHeader[1].' '.SUBSTRING($rowHeader[2],0,2).'.'.SUBSTRING($rowHeader[3],0,2).'.';
     $examDate = $rowHeader[0];
     $specName = $rowHeader[4];
     $result = $rowHeader[5];
@@ -71,17 +71,16 @@ try {
 }
 
 $querySign = "select
-            CONCAT(s.familyname,' ',SUBSTR(s.firstname,1,1),'.',SUBSTR(s.lastname,1,1),'.') as fio
+            s.familyname+' '+SUBSTRING(s.firstname,1,1)+'.'+SUBSTRING(s.lastname,1,1)+'.' as fio
           from [transoil].[dbo].[signgroup] s
           where s.examid = '$examid'
           ";
 try {
-    $resSign = $mysqli->query($querySign);
+    $resSign = $conn->query($querySign);
+    $resSign->setFetchMode(PDO::FETCH_ASSOC);
     $listSign=array();
-    while ($row = $resSign->fetch_array(MYSQLI_ASSOC)) {
-        foreach ($row as $k => $v)
-            $arrSign[$k]= $v;
-        array_push($listSign, $arrSign);
+    while ($row = $resSign->fetch()) {
+        array_push($listSign, $row);
     }
 } catch (Exception $e) {
     $success = false;
@@ -101,18 +100,15 @@ $queryQuestion = "select
           and c.userid = '$userid'
           ";
 try {
-    $resQuestion = $mysqli->query($queryQuestion);
+    $resQuestion = $conn->query($queryQuestion);
+    $resQuestion->setFetchMode(PDO::FETCH_ASSOC);
     $listQuestion=array();
-    while ($row = $resQuestion->fetch_array(MYSQLI_ASSOC)) {
-        foreach ($row as $k => $v)
-            $arrQuestion[$k]= $v;
-        array_push($listQuestion, $arrQuestion);
+    while ($row = $resQuestion->fetch()) {
+        array_push($listQuestion, $row);
     }
 } catch (Exception $e) {
     $success = false;
 }
-
-
 
 // * печать отчета
 if($success){

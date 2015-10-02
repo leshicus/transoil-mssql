@@ -12,8 +12,16 @@ $orgQuery = "
             order by a.orgabbr
         ";
 try {
-    $orgRes = $mysqli->query($orgQuery);
-    while ($row = $orgRes->fetch_array(MYSQLI_ASSOC)) {
+//    $orgRes = $conn->query($orgQuery);
+//    while ($row = $orgRes->fetch_array(MYSQLI_ASSOC)) {
+//        foreach ($row as $k => $v)
+//            $orgList[$i][$k] = $v;
+//        $i++;
+//    }
+
+    $orgRes = $conn->query($orgQuery);
+    $orgRes->setFetchMode(PDO::FETCH_ASSOC);
+    while($row = $orgRes->fetch()) {
         foreach ($row as $k => $v)
             $orgList[$i][$k] = $v;
         $i++;
@@ -37,8 +45,16 @@ $actQuery = "
             order by a.actnum
         ";
 try {
-    $actRes = $mysqli->query($actQuery);
-    while ($row = $actRes->fetch_array(MYSQLI_ASSOC)) {
+//    $actRes = $conn->query($actQuery);
+//    while ($row = $actRes->fetch_array(MYSQLI_ASSOC)) {
+//        foreach ($row as $k => $v)
+//            $actList[$i][$k] = $v;
+//        $i++;
+//    }
+
+    $actRes = $conn->query($actQuery);
+    $actRes->setFetchMode(PDO::FETCH_ASSOC);
+    while($row = $actRes->fetch()) {
         foreach ($row as $k => $v)
             $actList[$i][$k] = $v;
         $i++;
@@ -61,8 +77,16 @@ $groupQuery = "
             order by g.groupnum
         ";
 try {
-    $groupRes = $mysqli->query($groupQuery);
-    while ($row = $groupRes->fetch_array(MYSQLI_ASSOC)) {
+//    $groupRes = $conn->query($groupQuery);
+//    while ($row = $groupRes->fetch_array(MYSQLI_ASSOC)) {
+//        foreach ($row as $k => $v)
+//            $groupList[$i][$k] = $v;
+//        $i++;
+//    }
+
+    $groupRes = $conn->query($groupQuery);
+    $groupRes->setFetchMode(PDO::FETCH_ASSOC);
+    while($row = $groupRes->fetch()) {
         foreach ($row as $k => $v)
             $groupList[$i][$k] = $v;
         $i++;
@@ -73,48 +97,6 @@ try {
         array('success' => $success,
             'message' => $groupQuery));
 }
-
-// * формирование дерева
-/*$out = '{
-        "success": true,
-        "children": [';
-$cntAct = 0;
-foreach ($actList as $i => $rowAct) {
-    if ($cntAct > 0) {
-        $out .= ',';
-    }
-
-    $out .= '{
-                "id": ' . $rowAct['actid'] . ',
-                "text": "' . $rowAct['actabbr'] . '",
-                "leaf": false';
-    // * перебор групп
-    if (count($groupList)) {
-        $out .= ',
-        "children": [';
-        $cntGroup = 0;
-        foreach ($groupList as $j => $rowGroup) {
-            if ($rowGroup['actid'] == $rowAct['actid']) {
-                if ($cntGroup > 0) {
-                    $out .= ',';
-                }
-                $out .= '{
-                    "id": "' . $rowAct['actid'] . '-' . $rowGroup['groupid'] . '",
-                    "text": "Группа № ' . $rowAct['actnum'] . '.' . $rowGroup['groupnum'] . '",
-                    "leaf": true,
-                    //"expanded": true
-                    "groupid": ' .$rowGroup['groupid'].',}';
-                $cntGroup++;
-            }
-        }
-        $out .= ']';
-    }
-    $out .= '}';
-    $cntAct++;
-}
-
-$out .= ']}';
-echo $out;*/
 
 $out = '[';
 

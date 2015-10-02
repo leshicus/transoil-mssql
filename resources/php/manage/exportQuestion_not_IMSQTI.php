@@ -19,12 +19,11 @@ $sql = '
   WHERE a.questionid = q.questionid
   AND q.questionid IN ('.$str.')';
 try {
-    $res = $mysqli->query($sql);
-    $list=array();
-    while ($row = $res->fetch_array(MYSQLI_ASSOC)) {
-        foreach ($row as $k => $v)
-            $arr[$k]= $v;
-        array_push($list, $arr);
+    $list = array();
+    $res = $conn->query($sql);
+    $res->setFetchMode(PDO::FETCH_ASSOC);
+    while($row = $res->fetch()) {
+        array_push($list, $row);
     }
 } catch (Exception $e) {
     $success = false;

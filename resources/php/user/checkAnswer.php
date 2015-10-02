@@ -32,8 +32,8 @@ if ($answerid) { // * указан ответ
       AND a1.correct = 1";
 }
 try {
-    $res = $mysqli->query($query);
-    $row = $res->fetch_row();
+    $res = $conn->query($query);
+    $row = $res->fetch();
 } catch (Exception $e) {
     $success = false;
 }

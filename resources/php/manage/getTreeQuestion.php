@@ -12,8 +12,9 @@ $orgQuery = "
             order by a.orgabbr
         ";
 try {
-    $orgRes = $mysqli->query($orgQuery);
-    while ($row = $orgRes->fetch_array(MYSQLI_ASSOC)) {
+    $orgRes = $conn->query($orgQuery);
+    $orgRes->setFetchMode(PDO::FETCH_ASSOC);
+    while ($row = $orgRes->fetch()) {
         foreach ($row as $k => $v)
             $orgList[$i][$k] = $v;
         $i++;
@@ -37,8 +38,9 @@ $actQuery = "
             order by a.actnum
         ";
 try {
-    $actRes = $mysqli->query($actQuery);
-    while ($row = $actRes->fetch_array(MYSQLI_ASSOC)) {
+    $actRes = $conn->query($actQuery);
+    $actRes->setFetchMode(PDO::FETCH_ASSOC);
+    while ($row = $actRes->fetch()) {
         foreach ($row as $k => $v)
             $actList[$i][$k] = $v;
         $i++;
@@ -62,8 +64,9 @@ $groupQuery = "
             order by g.groupnum
         ";
 try {
-    $groupRes = $mysqli->query($groupQuery);
-    while ($row = $groupRes->fetch_array(MYSQLI_ASSOC)) {
+    $groupRes = $conn->query($groupQuery);
+    $groupRes->setFetchMode(PDO::FETCH_ASSOC);
+    while ($row = $groupRes->fetch()) {
         foreach ($row as $k => $v)
             $groupList[$i][$k] = $v;
         $i++;
@@ -91,9 +94,10 @@ foreach ($groupList as $groupId => $group) {
         ";
         //echo $knowQuery;
         try {
-            $knowRes = $mysqli->query($knowQuery);
+            $knowRes = $conn->query($knowQuery);
+            $knowRes->setFetchMode(PDO::FETCH_ASSOC);
             $knowList = array();
-            while ($row = $knowRes->fetch_array(MYSQLI_ASSOC)) {
+            while ($row = $knowRes->fetch()) {
                 foreach ($row as $k => $v)
                     $knowList[$i][$k] = $v;
                 $i++;

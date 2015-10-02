@@ -15,21 +15,21 @@ $orgid = $_REQUEST['orgid'];
 switch ($act) {
     case 'create':
         $sql = "
-            insert into [transoil].[dbo].[speciality]
+            insert [transoil].[dbo].[speciality]
             (groupid, orgid, specname)
             values
             (" . $data['groupid'] . "," . $data['orgid'] .",'" . $data['specname'] . "')
         ";
         try {
-            $res = $mysqli->query($sql);
+            $res = $conn->query($sql);
         } catch (Exception $e) {
             $success = false;
         }
 
         if ($success) {
             echo json_encode(
-                array('specid' => $mysqli->insert_id));
-            _log($mysqli, $userid, 16, 'Создание: ' . $mysqli->insert_id . ', ' . $data['specname']);
+                array('specid' => $conn->lastInsertId()));
+            _log($conn, $userid, 16, 'Создание: ' . $conn->lastInsertId() . ', ' . $data['specname']);
         } else {
             echo json_encode(
                 array('success' => $success,
@@ -87,7 +87,7 @@ switch ($act) {
             where specid = '$specid'
         ";
         try {
-            $res = $mysqli->query($sql);
+            $res = $conn->query($sql);
         } catch (Exception $e) {
             $success = false;
         }
@@ -95,7 +95,7 @@ switch ($act) {
             echo json_encode(
                 array('success' => $success,
                     'message' => $sql));
-            _log($mysqli, $userid, 16, 'Исправление: ' . $specid . ', ' . $specname);
+            _log($conn, $userid, 16, 'Исправление: ' . $specid . ', ' . $specname);
         } else {
             echo json_encode(
                 array('success' => $success,
@@ -111,13 +111,13 @@ switch ($act) {
             where specid = '$specid'
         ";
         try {
-            $res = $mysqli->query($sql);
+            $res = $conn->query($sql);
         } catch (Exception $e) {
             $success = false;
         }
 
         if ($success) {
-            _log($mysqli, $userid, 16, 'Удаление: ' . $specid);
+            _log($conn, $userid, 16, 'Удаление: ' . $specid);
             echo json_encode(array('success' => $success));
         } else {
             echo json_encode(

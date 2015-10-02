@@ -15,8 +15,12 @@ $query = "select
           and   c.userid = '$userid'
           and   c.reg = 1";
 try {
-    $res = $mysqli->query($query);
-    $row = $res->fetch_row();
+//    $res = $conn->query($query);
+//    $row = $res->fetch();
+
+    $res = $conn->query($sql);
+    $res->setFetchMode(PDO::FETCH_ASSOC);
+    $row = $res->fetch();
 } catch (Exception $e) {
     $success = false;
 }

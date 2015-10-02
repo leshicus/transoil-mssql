@@ -34,8 +34,10 @@ switch ($act) {
                   u.lastname,
                   u.roleid,
                   u.login,
-                  DATE_FORMAT(u.begindate, '%d.%m.%Y %H:%i') as begindate,
-                  DATE_FORMAT(u.enddate, '%d.%m.%Y %H:%i') as enddate,
+                  --DATE_FORMAT(u.begindate, '%d.%m.%Y %H:%i') as begindate,
+                  --DATE_FORMAT(u.enddate, '%d.%m.%Y %H:%i') as enddate,
+                  convert(varchar, u.begindate, 104) + ' '+ convert(varchar, u.begindate, 108) as begindate,
+                  convert(varchar, u.enddate, 104) + ' '+ convert(varchar, u.enddate, 108) as enddate,
                   u.specid,
                   s.specname,
                   s.groupid,
@@ -50,22 +52,8 @@ switch ($act) {
 		         left join [transoil].[dbo].[org] o on o.orgid = a.orgid "
 		         .$where.
 		        " order by u.familyname, u.firstname, u.lastname, u.begindate";
-       // echo $sql;
-        try {
-            $res = $mysqli->query($sql);
-            $list=array();
-            while ($row = $res->fetch_array(MYSQLI_ASSOC)) {
-                foreach ($row as $k => $v)
-                    $arr[$k]= $v;
-                array_push($list, $arr);
-            }
-        } catch (Exception $e) {
-            $success = false;
-            echo json_encode(
-                array('success' => $success,
-                    'message' => $sql));
-        }
-        echo json_encode($list);
+
+        echo json_encode(_read($conn,$sql));
         break;
     case 'update':
         //echo print_r($data);
@@ -117,8 +105,9 @@ switch ($act) {
                 where u.userid = '.$userid;
             //echo $sql;
             try {
-                $res = $mysqli->query($sql);
-                $row = $res->fetch_row();
+                $res = $conn->query($sql);
+                $res->setFetchMode(PDO::FETCH_ASSOC);
+                $row = $res->fetch();
 
                 $fio_0 = $row[0] . ' ' . $row[1] . ' ' . $row[2] . ' (' . $row[3] . ')';
                 $begindate_0 = $row[4];
@@ -142,7 +131,8 @@ switch ($act) {
                         roleid = '$roleid',
                         specid = '$specid',
                         password = '$password',
-                        enddate = DATE_FORMAT(STR_TO_DATE('".$enddate."', '%d.%m.%Y %H:%i'),'%Y.%m.%d %H:%i')
+                        --enddate = DATE_FORMAT(STR_TO_DATE('".$enddate."', '%d.%m.%Y %H:%i'),'%Y.%m.%d %H:%i')
+                        enddate = '".$enddate."'
                     where userid = '$userid'
                 ";
             }else{
@@ -153,12 +143,13 @@ switch ($act) {
                         lastname = '$lastname',
                         roleid = '$roleid',
                         specid = '$specid',
-                        enddate = DATE_FORMAT(STR_TO_DATE('".$enddate."', '%d.%m.%Y %H:%i'),'%Y.%m.%d %H:%i')
+                        enddate = '".$enddate."'
+                        --enddate = DATE_FORMAT(STR_TO_DATE('".$enddate."', '%d.%m.%Y %H:%i'),'%Y.%m.%d %H:%i')
                     where userid = '$userid'
                 ";
             }
             try {
-                $res = $mysqli->query($sql);
+                $res = $conn->query($sql);
             } catch (Exception $e) {
                 $success = false;
             }
@@ -168,15 +159,15 @@ switch ($act) {
                 array('success' => $success));
             // * логи
             if($password == $initPassword && $password != $password_0)
-                _log($mysqli, $userid_admin, 3, 'Сброс пароля на начальный. '.$fio_0);
+                _log($conn, $userid_admin, 3, 'Сброс пароля на начальный. '.$fio_0);
             if($enddate != '00.00.0000 00:00' && $enddate != '0000-00-00 00:00:00' && $enddate != null)
-                _log($mysqli, $userid_admin, 3, 'Блокировка пользователя. '.$fio_0.', '.$enddate);
+                _log($conn, $userid_admin, 3, 'Блокировка пользователя. '.$fio_0.', '.$enddate);
             if($enddate == '00.00.0000 00:00' && ($enddate_0 != '0000-00-00 00:00:00' && $enddate_0 != null))
-                _log($mysqli, $userid_admin, 3, 'Разблокировка пользователя. '.$fio_0.', '.date('d.m.Y H:i'));
+                _log($conn, $userid_admin, 3, 'Разблокировка пользователя. '.$fio_0.', '.date('d.m.Y H:i'));
             if($specid_0 != $specid)
-                _log($mysqli, $userid_admin, 3, 'Изменение специальности пользователя. '.$fio_0.', старая: '.$specname_0.', новая: '._getSpecname($mysqli,$specid));
+                _log($conn, $userid_admin, 3, 'Изменение специальности пользователя. '.$fio_0.', старая: '.$specname_0.', новая: '._getSpecname($conn,$specid));
             if($roleid_0 != $roleid)
-                _log($mysqli, $userid_admin, 3, 'Изменение роли пользователя. '.$fio_0.', старая: '.$rolename_0.', новая: '._getRolename($mysqli,$roleid));
+                _log($conn, $userid_admin, 3, 'Изменение роли пользователя. '.$fio_0.', старая: '.$rolename_0.', новая: '._getRolename($conn,$roleid));
         }else{
             echo json_encode(
                 array('success' => 'Ошибка запроса к базе',
@@ -207,7 +198,7 @@ switch ($act) {
                 where userid = '$userid'
             ";
             try {
-                $res = $mysqli->query($sql);
+                $res = $conn->query($sql);
             } catch (Exception $e) {
                 $success = false;
                 $message = $sql;
@@ -216,7 +207,7 @@ switch ($act) {
 
         if ($success) {
             echo json_encode(array('success' => $success));
-            _log($mysqli, $userid_admin, 3, 'Удаление. '.$fio.', '._getSpecname($mysqli,$specid));
+            _log($conn, $userid_admin, 3, 'Удаление. '.$fio.', '._getSpecname($conn,$specid));
         } else {
             echo json_encode(
                 array('success' => $success,

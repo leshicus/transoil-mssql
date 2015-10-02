@@ -10,18 +10,18 @@ $data = json_decode(file_get_contents('php://input'), true);
 switch ($act) {
     case 'create':
         $sql = "
-            insert into [transoil].[dbo].[grp]()values();
+            insert [transoil].[dbo].[grp]()values();
         ";
         try {
-            $res = $mysqli->query($sql);
+            $res = $conn->query($sql);
         } catch (Exception $e) {
             $success = false;
         }
 
         if($success){
             echo json_encode(
-                array('groupid' => $mysqli->insert_id));
-            _log($mysqli, $userid, 15, 'Создание: '.$mysqli->insert_id.', '.$actid.', '.$groupnum);
+                array('groupid' => $conn->lastInsertId()));
+            _log($conn, $userid, 15, 'Создание: '.$conn->lastInsertId().', '.$actid.', '.$groupnum);
         }else{
             echo json_encode(
                 array('success' => $success,
@@ -42,9 +42,10 @@ switch ($act) {
 		        from [transoil].[dbo].[grp] g
 		        order by g.actid, g.groupnum';
         try {
-            $res = $mysqli->query($sql);
+            $res = $conn->query($sql);
+            $res->setFetchMode(PDO::FETCH_ASSOC);
             $list=array();
-            while ($row = $res->fetch_array(MYSQLI_ASSOC)) {
+            while ($row = $res->fetch()) {
                 foreach ($row as $k => $v){
                     if($k == 'knowids')
                         $arr[$k] = explode(",", $v); // * преобразуем строку вида а,б,с в массив [а,б,с]
@@ -79,7 +80,7 @@ switch ($act) {
             where groupid = '$groupid'
         ";
         try {
-            $res = $mysqli->query($sql);
+            $res = $conn->query($sql);
         } catch (Exception $e) {
             $success = false;
         }
@@ -87,7 +88,7 @@ switch ($act) {
             echo json_encode(
                 array('success' => $success,
                     'message' => $sql));
-            _log($mysqli, $userid, 15, 'Изменение: '.$groupid.', '.$actid.', '.$groupnum);
+            _log($conn, $userid, 15, 'Изменение: '.$groupid.', '.$actid.', '.$groupnum);
         }else{
             echo json_encode(
                 array('success' => $success,
@@ -103,7 +104,7 @@ switch ($act) {
             where groupid = '$groupid'
         ";
         try {
-            $res = $mysqli->query($sql);
+            $res = $conn->query($sql);
         } catch (Exception $e) {
             $success = false;
         }
@@ -111,7 +112,7 @@ switch ($act) {
         if($success){
             echo json_encode(
                 array('success' => $success));
-            _log($mysqli, $userid, 15, 'Удаление: '.$groupid);
+            _log($conn, $userid, 15, 'Удаление: '.$groupid);
         }else{
             echo json_encode(
                 array('success' => $success,

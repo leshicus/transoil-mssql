@@ -5,47 +5,14 @@ $dateFrom = $_REQUEST['dateFrom'];
 $dateTo = $_REQUEST['dateTo'];
 $org = $_REQUEST['org'];
 
-/*$sql = "SELECT
-    a.actabbr as name,
-    (SELECT COUNT(*)
-          FROM [transoil].[dbo].[usr] u,
-          [transoil].[dbo].[speciality] s,
-          [transoil].[dbo].[grp] g
-          WHERE u.specid = s.specid
-          AND g.groupid = s.groupid
-          AND a.actid = g.actid
-          AND u.userid IN (
-            SELECT c.userid
-            FROM [transoil].[dbo].[exam] e,
-              [transoil].[dbo].[class] c
-            WHERE e.examdate BETWEEN '$dateFrom' AND '$dateTo'
-              AND c.examid = e.examid
-              AND c.result <> -1
-          )) AS data
-  FROM [transoil].[dbo].[activity] a
-  HAVING data>0
-";
-
-try {
-    $res = $mysqli->query($sql);
-    $list=array();
-    while ($row = $res->fetch_array(MYSQLI_ASSOC)) {
-        foreach ($row as $k => $v)
-            $arr[$k]= $v;
-        array_push($list, $arr);
-    }
-} catch (Exception $e) {
-    $success = false;
-    echo '{"success" => '.$success.',
-           "message" => '.$sql.'}';
-}*/
-
 // * получим максимальное количество групп
 $sql = 'SELECT MAX(g.groupnum) as groupnum
         FROM [transoil].[dbo].[grp] g';
 try {
-    $res = $mysqli->query($sql);
-    $row = $res->fetch_row();
+    $res = $conn->query($sql);
+    $res->setFetchMode(PDO::FETCH_ASSOC);
+    $row = $res->fetch();
+
     $groupnum = $row[0];
 } catch (Exception $e) {
     $success = false;
@@ -87,12 +54,11 @@ $sql .= '
 ';
 
 try {
-    $res = $mysqli->query($sql);
-    $list=array();
-    while ($row = $res->fetch_array(MYSQLI_ASSOC)) {
-        foreach ($row as $k => $v)
-            $arr[$k]= $v;
-        array_push($list, $arr);
+    $list = array();
+    $res = $conn->query($sql);
+    $res->setFetchMode(PDO::FETCH_ASSOC);
+    while($row = $res->fetch()) {
+        array_push($list, $row);
     }
 } catch (Exception $e) {
     $success = false;
@@ -100,7 +66,6 @@ try {
            "message" => '.$sql.'}';
 }
 
-
 echo json_encode($list);
-
+$conn = null;
 ?>
